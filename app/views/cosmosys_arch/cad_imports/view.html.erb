@@ -1,0 +1,3 @@
+<h2><%= @issue.subject %> — <%= l(:label_cosmosys_arch_cad_model) %></h2>
+<p><%= link_to @issue.csid, issue_path(@issue) %> · <%= link_to @source.subject, issue_path(@source) %></p>
+<%= render partial: 'cosmosys_arch/cad_imports/viewer' %>

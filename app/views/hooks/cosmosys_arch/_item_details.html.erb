@@ -1,0 +1,19 @@
+<% if issue.cosmosys_item_kind_key == 'arch_node' %>
+  <div class="box cosmosys-arch-details">
+    <h3><%= l(:label_cosmosys_arch_item_profile_node) %></h3>
+    <p><strong><%= l(:field_arch_type) %>:</strong>
+      <%= issue.arch_type.present? ? l("label_cosmosys_arch_type_#{issue.arch_type}") : '-' %></p>
+  </div>
+<% end %>
+<% if issue.project.csys_project_profile == 'architecture' && issue.has_attribute?(:arch_model_csid) %>
+  <% model = issue.cosmosys_arch_model %>
+  <% if model && model.visible?(User.current) %>
+    <p><%= link_to l(:label_cosmosys_arch_cad_model), arch_cad_view_path(issue) %></p>
+  <% elsif issue.editable?(User.current) && User.current.allowed_to?(:add_issues, issue.project) %>
+    <p><%= link_to l(:label_cosmosys_arch_cad_import), arch_cad_import_path(issue) %></p>
+  <% end %>
+  <% if issue.cosmosys_item_kind_key == 'arch_dof' %>
+    <p><strong><%= l(:label_cosmosys_arch_dof) %>:</strong> <%= issue.arch_motion %> / <%= issue.arch_axis %> / <%= issue.arch_space %>;
+    [<%= issue.arch_min %>, <%= issue.arch_max %>], <%= issue.arch_default %>, Δ <%= issue.arch_step %>.</p>
+  <% end %>
+<% end %>

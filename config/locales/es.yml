@@ -1,0 +1,44 @@
+es:
+  label_cosmosys_arch_project_profile: Arquitectura de producto (PBS)
+  text_cosmosys_arch_project_profile: Proyecto con una estructura de descomposición del producto. Los nodos de arquitectura pueden contener otros nodos sin límite fijo de profundidad.
+  label_cosmosys_arch_item_profile_node: Nodo de arquitectura
+  label_cosmosys_arch_item_profile_node_fields: Campos del nodo de arquitectura
+  text_cosmosys_arch_item_profile_node: Nodo dentro de la jerarquía de arquitectura del producto.
+  field_arch_type: Tipo de arquitectura
+  label_cosmosys_arch_type_complex: Complejo
+  label_cosmosys_arch_type_optical: Óptico
+  label_cosmosys_arch_type_mechanical: Mecánico
+  label_cosmosys_arch_type_hardware: Hardware
+  label_cosmosys_arch_type_software: Software
+  label_cosmosys_arch_dof: Grado de libertad
+  text_cosmosys_arch_dof: Traslación o rotación rígida que controla un nodo de arquitectura.
+  label_cosmosys_arch_cad_import: Importar arquitectura desde GLB y YAML
+  label_cosmosys_arch_cad_model: Modelo CAD y controles
+  text_cosmosys_arch_cad_import: Adjunta a este ítem un GLB y su YAML y revisa la jerarquía. No se crea ningún ítem antes de confirmar.
+  label_cosmosys_arch_review: Revisar importación
+  label_cosmosys_arch_review_again: Repetir revisión
+  label_cosmosys_arch_confirm: Confirmar importación
+  label_cosmosys_arch_nodes: Nodos
+  label_cosmosys_arch_dofs: Grados de libertad
+  label_cosmosys_arch_import_mode: Política de importación
+  label_cosmosys_arch_visible: Visible en el modelo
+  label_cosmosys_arch_mode_include: Incluir
+  label_cosmosys_arch_mode_atomic: Ensamblaje atómico
+  label_cosmosys_arch_mode_exclude: Excluir subárbol
+  text_cosmosys_arch_preflight: Excluir elimina el subárbol de la arquitectura. Los ensamblajes atómicos conservan la geometría pero no sus ítems internos. Despliega los que contengan controles necesarios. Los ítems invisibles siguen disponibles en informes. Repite la revisión si cambias decisiones.
+  text_cosmosys_arch_pose_temporary: Los sliders sólo cambian este visor. No alteran el CAD original ni los valores predeterminados. Composición reposo, XYZ local y XYZ global, padres primero. PORIS y MQTT aún no están conectados.
+  label_cosmosys_arch_controls_ready: Controles del modelo disponibles
+  label_cosmosys_arch_reset_pose: Volver a los valores predeterminados
+  label_cosmosys_arch_expand_all: Desplegar todo
+  label_cosmosys_arch_collapse_all: Plegar todo
+  label_cosmosys_arch_show_model: Ver modelo completo
+  label_cosmosys_arch_show_context: Ver selección resaltada en contexto
+  text_cosmosys_arch_tree_inspect: Pulsa el nombre para inspeccionar su subárbol; la flecha despliega sus hijos. El visor permite inspeccionar también lo excluido o invisible y no representa el filtro final. Plegar no cambia las decisiones.
+  text_cosmosys_arch_repeat_review: Has cambiado decisiones. Pulsa «Repetir revisión» antes de confirmar la importación.
+  field_arch_motion: Movimiento
+  field_arch_axis: Eje
+  field_arch_space: Sistema de coordenadas
+  field_arch_min: Mínimo
+  field_arch_max: Máximo
+  field_arch_default: Predeterminado
+  field_arch_step: Paso

@@ -1,0 +1,18 @@
+<% choice = @plan.choices.fetch(node['index'].to_s); children = @children.fetch(node['index'], []) %>
+<li data-arch-node="<%= node['index'] %>" data-parent="<%= node['parent'] %>">
+  <% if children.any? %><details><summary><% end %>
+  <span class="arch-node-row">
+    <button type="button" class="arch-node-select" data-arch-select="<%= node['index'] %>" title="<%= node['path'] %>" aria-pressed="false"><%= node['name'] %></button>
+    <span class="arch-node-options">
+      <%= select_tag nil, options_for_select(%w[include atomic exclude].map { |mode| [l("label_cosmosys_arch_mode_#{mode}"), mode] }, choice['mode']), data: {arch_mode: true}, id: nil, aria: {label: "#{l(:label_cosmosys_arch_import_mode)}: #{node['name']}"} %>
+      <label><%= check_box_tag nil, '1', choice['visible'], data: {arch_visible: true}, id: nil %> <%= l(:label_cosmosys_arch_visible) %></label>
+    </span>
+    <% controls = @node_controls.fetch(node['index'], []).map { |control| control['key'] } %>
+    <% if controls.any? %><small><%= l(:label_cosmosys_arch_dofs) %>: <%= controls.join(', ') %></small><% end %>
+  </span>
+  <% if children.any? %>
+    </summary>
+    <ul><%= render partial: 'node', collection: children, as: :node %></ul>
+    </details>
+  <% end %>
+</li>

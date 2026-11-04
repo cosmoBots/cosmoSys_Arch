@@ -1,0 +1,14 @@
+.arch-preflight-layout { display:grid;grid-template-columns:minmax(340px,40%) minmax(0,1fr);gap:1em;align-items:start }
+.arch-preflight-tree { max-height:72vh;overflow:auto;border:1px solid #ccc;padding:0 .6em }
+.arch-cad-tree, .arch-cad-tree ul { list-style:none;padding-left:1em }
+.arch-cad-tree { padding-left:0 }
+.arch-cad-tree summary { cursor:pointer }
+.arch-node-row { display:inline-grid;gap:.3em;padding:.4em;vertical-align:top;max-width:100%;box-sizing:border-box }
+.arch-node-select { text-align:left;overflow-wrap:anywhere;font-weight:600 }
+.arch-node-select[aria-pressed=true] { background:#fff0bd;border-color:#916200 }
+.arch-node-options { display:flex;flex-wrap:wrap;gap:.5em;align-items:center;font-size:.9em }
+.arch-cad-tree li[data-policy-skipped=true] > .arch-node-row,
+.arch-cad-tree li[data-policy-skipped=true] > details > summary > .arch-node-row { opacity:.5 }
+.arch-preflight-preview { min-width:0;position:sticky;top:.5em }
+.arch-preflight-preview .cad-preview-canvas { height:58vh;min-height:350px }
+@media(max-width:900px) { .arch-preflight-layout { grid-template-columns:1fr }.arch-preflight-preview { position:static } }

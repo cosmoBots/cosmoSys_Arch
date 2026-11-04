@@ -1,0 +1,19 @@
+<% if issue.cosmosys_item_kind_key == 'arch_node' %>
+  <fieldset class="box cosmosys-arch-fields">
+    <legend><%= l(:label_cosmosys_arch_item_profile_node_fields) %></legend>
+    <p><%= form.select :arch_type,
+                       CosmosysArch::ProfileRegistration::TYPES.map { |value| [l("label_cosmosys_arch_type_#{value}"), value] },
+                       required: true %></p>
+  </fieldset>
+<% end %>
+<% if issue.cosmosys_item_kind_key == 'arch_dof' && issue.has_attribute?(:arch_motion) %>
+  <fieldset class="box">
+    <legend><%= l(:label_cosmosys_arch_dof) %></legend>
+    <% {arch_motion: %w[position rotation], arch_axis: %w[x y z], arch_space: %w[local global]}.each do |field, values| %>
+      <p><%= form.select field, values %></p>
+    <% end %>
+    <% %i[arch_min arch_max arch_default arch_step].each do |field| %>
+      <p><%= form.number_field field, step: 'any', required: true %></p>
+    <% end %>
+  </fieldset>
+<% end %>

@@ -1,0 +1,31 @@
+<% unless local_assigns[:poris_simulation] %>
+  <p class="info"><%= l(:text_cosmosys_arch_pose_temporary) %></p>
+<% end %>
+<div style="display:grid;grid-template-columns:minmax(240px,30%) minmax(0,1fr);gap:1em">
+  <div id="arch-cad-controls" data-ready-label="<%= l(:label_cosmosys_arch_controls_ready) %>">
+    <h3><%= l(:label_cosmosys_arch_dofs) %></h3>
+    <% @dofs.each do |item| %>
+      <p><%= link_to item.subject, issue_path(item) %> (<%= item.arch_axis %>, <%= item.arch_space %>, <%= item.arch_motion == 'rotation' ? '°' : 'm' %>)<br>
+      <input type="range" aria-label="<%= item.subject %>" data-arch-control="<%= item.csid %>" data-default="<%= item.arch_default %>" min="<%= item.arch_min %>" max="<%= item.arch_max %>" step="<%= item.arch_step %>" value="<%= item.arch_default %>" disabled>
+      <output><%= item.arch_default %></output></p>
+    <% end %>
+    <button type="button" data-arch-reset disabled><%= l(:label_cosmosys_arch_reset_pose) %></button>
+    <p role="status"><%= l(:label_loading) %></p>
+    <h3><%= l(:label_cosmosys_arch_nodes) %></h3>
+    <ul style="max-height:45vh;overflow:auto">
+      <% @node_items.select(&:cosmosys_arch_node?).each do |item| %>
+        <li><%= link_to item.subject, arch_cad_view_path(item) %></li>
+      <% end %>
+    </ul>
+  </div>
+  <div style="min-width:0"><%= render template: 'attachments/cad_preview' %></div>
+</div>
+<script type="application/json" id="arch-cad-configuration"><%= raw(json_escape(JSON.generate(@configuration))) %></script>
+<% content_for :header_tags do %>
+  <script type="module">
+    import {ModelControls} from <%= raw(asset_path('plugin_assets/cosmosys_cad_preview/model_controls.js').to_json) %>;
+    import {initializeArchitectureControls} from <%= raw(asset_path('plugin_assets/cosmosys_arch/cad_architecture.js').to_json) %>;
+    initializeArchitectureControls(ModelControls);
+  </script>
+  <style>.cad-preview-canvas { height:65vh;min-height:400px } [data-arch-control] { width:80% }</style>
+<% end %>

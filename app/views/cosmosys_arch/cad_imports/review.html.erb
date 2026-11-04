@@ -1,0 +1,37 @@
+<h2><%= l(:label_cosmosys_arch_review) %> — <%= @issue.subject %></h2>
+<p><%= l(:text_cosmosys_arch_preflight) %></p>
+<% if @review_error %><div class="flash error" role="alert"><%= @review_error %></div><% end %>
+<p><strong><%= @retained.size %></strong> / <%= @plan.model.nodes.size %> <%= l(:label_cosmosys_arch_nodes) %>;
+<strong><%= @controls.size %></strong> <%= l(:label_cosmosys_arch_dofs) %>.</p>
+<%= form_tag arch_cad_create_path(@issue), id: 'arch-cad-plan' do %>
+  <%= hidden_field_tag :glb_id, @plan.glb.id %><%= hidden_field_tag :yaml_id, @plan.yaml.id %>
+  <%= hidden_field_tag :plan_digest, @plan.digest %><%= hidden_field_tag :choices_json, JSON.generate(@plan.choices.transform_values { |v| v.merge('visible' => v['visible'] ? '1' : '0') }) %>
+  <div class="arch-preflight-layout" id="arch-cad-preflight" data-blocked="<%= @review_error.present? %>">
+    <section class="arch-preflight-tree" aria-label="<%= l(:label_cosmosys_arch_nodes) %>">
+      <p><button type="button" data-arch-expand><%= l(:label_cosmosys_arch_expand_all) %></button>
+      <button type="button" data-arch-collapse><%= l(:label_cosmosys_arch_collapse_all) %></button></p>
+      <p class="info"><%= l(:text_cosmosys_arch_tree_inspect) %></p>
+      <ul class="arch-cad-tree">
+        <%= render partial: 'node', collection: @children.fetch(nil, []), as: :node %>
+      </ul>
+    </section>
+    <section class="arch-preflight-preview">
+      <p><button type="button" data-arch-show-all disabled><%= l(:label_cosmosys_arch_show_model) %></button>
+      <label><input type="checkbox" data-arch-context disabled> <%= l(:label_cosmosys_arch_show_context) %></label></p>
+      <p data-arch-preview-status role="status" aria-live="polite"><%= l(:label_loading) %></p>
+      <%= render template: 'attachments/cad_preview' %>
+    </section>
+  </div>
+  <p data-arch-decisions-changed hidden class="warning"><%= l(:text_cosmosys_arch_repeat_review) %></p>
+  <p><%= submit_tag l(:label_cosmosys_arch_review_again), formaction: arch_cad_review_path(@issue) %>
+  <%= submit_tag l(:label_cosmosys_arch_confirm), data: {arch_confirm: true}, disabled: @review_error.present? %></p>
+<% end %>
+<script type="application/json" id="arch-preflight-configuration"><%= raw(json_escape(JSON.generate(@configuration))) %></script>
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'cad_preflight', plugin: 'cosmosys_arch' %>
+  <script type="module">
+    import {ModelControls} from <%= raw(asset_path('plugin_assets/cosmosys_cad_preview/model_controls.js').to_json) %>;
+    import {initializeCadPreflight} from <%= raw(asset_path('plugin_assets/cosmosys_arch/cad_preflight.js').to_json) %>;
+    initializeCadPreflight(ModelControls);
+  </script>
+<% end %>

@@ -1,0 +1,44 @@
+en:
+  label_cosmosys_arch_project_profile: Product architecture (PBS)
+  text_cosmosys_arch_project_profile: Product Breakdown Structure project. Architecture nodes can contain other architecture nodes without a fixed depth limit.
+  label_cosmosys_arch_item_profile_node: Architecture node
+  label_cosmosys_arch_item_profile_node_fields: Architecture node fields
+  text_cosmosys_arch_item_profile_node: A node in the product architecture hierarchy.
+  field_arch_type: Architecture type
+  label_cosmosys_arch_type_complex: Complex
+  label_cosmosys_arch_type_optical: Optical
+  label_cosmosys_arch_type_mechanical: Mechanical
+  label_cosmosys_arch_type_hardware: Hardware
+  label_cosmosys_arch_type_software: Software
+  label_cosmosys_arch_dof: Degree of freedom
+  text_cosmosys_arch_dof: A rigid translation or rotation controlling an architecture node.
+  label_cosmosys_arch_cad_import: Import architecture from GLB and YAML
+  label_cosmosys_arch_cad_model: CAD model and controls
+  text_cosmosys_arch_cad_import: Attach a GLB model and its YAML to this item, then review the hierarchy. No items are created before confirmation.
+  label_cosmosys_arch_review: Review import
+  label_cosmosys_arch_review_again: Repeat review
+  label_cosmosys_arch_confirm: Confirm import
+  label_cosmosys_arch_nodes: Nodes
+  label_cosmosys_arch_dofs: Degrees of freedom
+  label_cosmosys_arch_import_mode: Import policy
+  label_cosmosys_arch_visible: Visible in model
+  label_cosmosys_arch_mode_include: Include
+  label_cosmosys_arch_mode_atomic: Atomic assembly
+  label_cosmosys_arch_mode_exclude: Exclude subtree
+  text_cosmosys_arch_preflight: Excluding removes the subtree from the architecture. Atomic assemblies retain geometry but not internal items. Expand atomic assemblies containing required controls. Invisible items remain available in reports. Repeat review after changing decisions.
+  text_cosmosys_arch_pose_temporary: Sliders change only this viewer. They do not change the CAD source or saved defaults. Composition is rest, local XYZ, then global XYZ, parents first. PORIS and MQTT are not connected yet.
+  label_cosmosys_arch_controls_ready: Model controls ready
+  label_cosmosys_arch_reset_pose: Return to defaults
+  label_cosmosys_arch_expand_all: Expand all
+  label_cosmosys_arch_collapse_all: Collapse all
+  label_cosmosys_arch_show_model: Show complete model
+  label_cosmosys_arch_show_context: Highlight selection in context
+  text_cosmosys_arch_tree_inspect: Click a name to inspect its subtree; use the arrow to expand children. Inspection includes excluded or invisible geometry and does not represent the final filter. Folding never changes decisions.
+  text_cosmosys_arch_repeat_review: Decisions have changed. Repeat review before confirming the import.
+  field_arch_motion: Motion
+  field_arch_axis: Axis
+  field_arch_space: Coordinate space
+  field_arch_min: Minimum
+  field_arch_max: Maximum
+  field_arch_default: Default
+  field_arch_step: Step
