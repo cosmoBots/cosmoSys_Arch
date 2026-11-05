@@ -17,6 +17,7 @@ module CosmosysArch
 
     def review
       build_plan
+      @cad_report_tools_disabled = true
       @retained = @plan.selected_nodes
       begin
         @controls = @plan.selected_controls

@@ -6,6 +6,8 @@ module CosmosysArch
 
     def prepare_architecture_view
       load_model
+      # Slider poses are session-local, not editorial report views.
+      @cad_report_tools_disabled = true
       @cad_format, @cad_snapshot, @cad_image = 'glb', false, nil
       @node_items = Issue.where(project_id: @source.project.root.self_and_descendants.select(:id), arch_model_csid: @source.csid).includes(:tracker).to_a
       @node_items.select! { |item| item.visible?(User.current) }

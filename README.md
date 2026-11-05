@@ -71,6 +71,9 @@ uses degrees; translation uses metres. YAML rest/default is zero.
 The node viewer isolates the selected subtree and offers its DoF sliders plus
 reset. Slider poses are temporary, not saved as report poses. It reuses the
 upstream viewer unchanged, with generic controls supplied by our CAD plugin.
+Architecture opts out of editorial report tools only for its preflight and
+temporary model views; it does not override or hide the CAD integration's
+report-tool partial in ordinary attachment/embedded viewers.
 The original GLB remains untouched; a cached derivative adds per-file node
 indices for viewer binding. Re-export/synchronization needs stable identities
 in a future iteration; indices are not cross-version UUIDs.
