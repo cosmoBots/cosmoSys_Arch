@@ -2,6 +2,10 @@
 
 Version **0.1.3** (development prototype).
 
+> **EXPERIMENTAL — opt-in:** This plugin is not part of the production core.
+> Expect defects, incomplete features, performance limits and breaking changes.
+> Do not install it if you require production-level stability and support.
+
 Historical migration data access uses ActiveRecord for database portability.
 The dependency minimums below select the matching base and Requirements fixes.
 
