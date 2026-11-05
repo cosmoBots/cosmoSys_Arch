@@ -5,7 +5,7 @@ Redmine::Plugin.register :cosmosys_arch do
   name 'cosmoSys Architecture'
   author 'cosmoBots.eu'
   description 'Product architecture profiles for cosmoSys.'
-  version '0.1.3'
+  version '0.1.4'
   url 'https://cosmobots.eu'
   author_url 'https://cosmobots.eu'
 

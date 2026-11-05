@@ -1,6 +1,11 @@
 # cosmoSys Architecture
 
-Version **0.1.3** (development prototype).
+Version **0.1.4** (development prototype).
+
+Maintenance: the minimal CAD viewer layout is now request-local to Architecture
+and bridge views, not a global override of Redmine's attachment layout. Ordinary
+text, code and image attachments retain their normal navigation and metadata.
+Dependency minimums are unchanged.
 
 > **EXPERIMENTAL — opt-in:** This plugin is not part of the production core.
 > Expect defects, incomplete features, performance limits and breaking changes.
