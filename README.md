@@ -1,6 +1,6 @@
 # cosmoSys Architecture
 
-Development version **0.1.5-dirty**.
+Version **0.1.5** (experimental).
 
 Temporary CAD views use Redmine CAD Preview's native readonly partial through
 cosmosys_cad_preview 0.1.7+. Preflight and PORIS–CAD poses cannot be saved through
@@ -25,7 +25,7 @@ traceability is deferred.
 - [cosmoSys](https://github.com/cosmoBots/cosmoSys) 0.2.8 or later
 - [cosmoSys Requirements](https://github.com/cosmoBots/cosmoSys_Req) 0.3.5 or later
 - [cosmoSys CAD Preview](https://github.com/cosmoBots/cosmoSys_cad_preview) 0.1.7 or later
-  (development `model_controls.js` module).
+  (`model_controls.js` module).
 
 The requirement plugin is an explicit dependency for the shared workflow and
 future modular traceability work. The Architecture project profile does not
