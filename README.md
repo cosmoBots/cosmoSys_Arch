@@ -1,11 +1,10 @@
 # cosmoSys Architecture
 
-Version **0.1.4** (development prototype).
+Development version **0.1.5-dirty**.
 
-Maintenance: the minimal CAD viewer layout is now request-local to Architecture
-and bridge views, not a global override of Redmine's attachment layout. Ordinary
-text, code and image attachments retain their normal navigation and metadata.
-Dependency minimums are unchanged.
+Temporary CAD views use Redmine CAD Preview's native readonly partial through
+cosmosys_cad_preview 0.1.7+. Preflight and PORIS–CAD poses cannot be saved through
+their toolbar. No attachment-layout override or duplicate report toolbar is used.
 
 > **EXPERIMENTAL — opt-in:** This plugin is not part of the production core.
 > Expect defects, incomplete features, performance limits and breaking changes.
@@ -25,7 +24,7 @@ traceability is deferred.
 - Redmine 7.0.1
 - [cosmoSys](https://github.com/cosmoBots/cosmoSys) 0.2.8 or later
 - [cosmoSys Requirements](https://github.com/cosmoBots/cosmoSys_Req) 0.3.5 or later
-- [cosmoSys CAD Preview](https://github.com/cosmoBots/cosmoSys_cad_preview) 0.1.3 or later
+- [cosmoSys CAD Preview](https://github.com/cosmoBots/cosmoSys_cad_preview) 0.1.7 or later
   (development `model_controls.js` module).
 
 The requirement plugin is an explicit dependency for the shared workflow and

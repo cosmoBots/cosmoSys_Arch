@@ -17,7 +17,6 @@ module CosmosysArch
 
     def review
       build_plan
-      @cad_report_tools_disabled = true
       @retained = @plan.selected_nodes
       begin
         @controls = @plan.selected_controls
@@ -31,7 +30,6 @@ module CosmosysArch
       @node_controls = @plan.model.controls.group_by { |control| control['node'] }
       @configuration = @plan.model.payload.except('controls').merge('controls' => [])
       prepend_view_path File.expand_path('../../views', __dir__)
-      use_architecture_viewer_layout
       render :review
     end
 

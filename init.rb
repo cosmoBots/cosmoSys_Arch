@@ -5,12 +5,12 @@ Redmine::Plugin.register :cosmosys_arch do
   name 'cosmoSys Architecture'
   author 'cosmoBots.eu'
   description 'Product architecture profiles for cosmoSys.'
-  version '0.1.4'
+  version '0.1.5-dirty'
   url 'https://cosmobots.eu'
   author_url 'https://cosmobots.eu'
 
   requires_redmine_plugin :cosmosys, version_or_higher: '0.2.8'
-  requires_redmine_plugin :cosmosys_cad_preview, version_or_higher: '0.1.3'
+  requires_redmine_plugin :cosmosys_cad_preview, version_or_higher: '0.1.7'
   requires_redmine_plugin :cosmosys_req, version_or_higher: '0.3.5'
 end
 

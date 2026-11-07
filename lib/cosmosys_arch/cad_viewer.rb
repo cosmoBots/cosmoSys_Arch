@@ -4,14 +4,9 @@ module CosmosysArch
   module CadViewer
     private
 
-    def use_architecture_viewer_layout
-      prepend_view_path File.expand_path('../../app/views/cosmosys_arch/viewer', __dir__)
-    end
-
     def prepare_architecture_view
       load_model
       # Slider poses are session-local, not editorial report views.
-      @cad_report_tools_disabled = true
       @cad_format, @cad_snapshot, @cad_image = 'glb', false, nil
       @node_items = Issue.where(project_id: @source.project.root.self_and_descendants.select(:id), arch_model_csid: @source.csid).includes(:tracker).to_a
       @node_items.select! { |item| item.visible?(User.current) }
@@ -50,7 +45,6 @@ module CosmosysArch
             'default' => item.arch_default, 'min' => item.arch_min, 'max' => item.arch_max, 'step' => item.arch_step }
         end)
       prepend_view_path File.expand_path('../../app/views', __dir__)
-      use_architecture_viewer_layout
     end
     # Reuse the upstream viewer template, but serve our annotated derivative.
     def cad_preview_file_path(_attachment)

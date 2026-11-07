@@ -19,7 +19,7 @@
       <p><button type="button" data-arch-show-all disabled><%= l(:label_cosmosys_arch_show_model) %></button>
       <label><input type="checkbox" data-arch-context disabled> <%= l(:label_cosmosys_arch_show_context) %></label></p>
       <p data-arch-preview-status role="status" aria-live="polite"><%= l(:label_loading) %></p>
-      <%= render template: 'attachments/cad_preview' %>
+      <%= render partial: 'cosmosys_cad_preview/temporary_viewer' %>
     </section>
   </div>
   <p data-arch-decisions-changed hidden class="warning"><%= l(:text_cosmosys_arch_repeat_review) %></p>

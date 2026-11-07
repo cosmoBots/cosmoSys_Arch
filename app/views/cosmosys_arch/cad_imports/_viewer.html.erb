@@ -18,7 +18,7 @@
       <% end %>
     </ul>
   </div>
-  <div style="min-width:0"><%= render template: 'attachments/cad_preview' %></div>
+  <div style="min-width:0"><%= render partial: 'cosmosys_cad_preview/temporary_viewer' %></div>
 </div>
 <script type="application/json" id="arch-cad-configuration"><%= raw(json_escape(JSON.generate(@configuration))) %></script>
 <% content_for :header_tags do %>
