@@ -2,8 +2,8 @@
   <p class="info"><%= l(:text_cosmosys_arch_pose_temporary) %></p>
 <% end %>
 <%= render partial: 'cosmosys_arch/cad_imports/piece_camera', locals: {readonly: local_assigns[:poris_simulation]} %>
-<div class="cosmosys-arch-viewer" style="display:grid;grid-template-columns:minmax(240px,30%) minmax(0,1fr);gap:1em">
-  <div id="arch-cad-controls" data-ready-label="<%= l(:label_cosmosys_arch_controls_ready) %>">
+<div class="cosmosys-arch-viewer" <% unless local_assigns[:presentation_only] %>style="display:grid;grid-template-columns:minmax(240px,30%) minmax(0,1fr);gap:1em"<% end %>>
+  <div id="arch-cad-controls" <%= 'hidden' if local_assigns[:presentation_only] %> data-ready-label="<%= l(:label_cosmosys_arch_controls_ready) %>">
     <h3><%= l(:label_cosmosys_arch_dofs) %></h3>
     <% @dofs.each do |item| %>
       <p><%= link_to item.subject, issue_path(item) %> (<%= item.arch_axis %>, <%= item.arch_space %>, <%= item.arch_motion == 'rotation' ? '°' : 'm' %>)<br>
@@ -19,7 +19,7 @@
       <% end %>
     </ul>
   </div>
-  <div style="min-width:0"><%= render partial: 'cosmosys_cad_preview/temporary_viewer' %></div>
+  <div style="min-width:0"><%= render partial: 'cosmosys_cad_preview/temporary_viewer', locals: {presentation_only: local_assigns[:presentation_only]} %></div>
 </div>
 <script type="application/json" id="arch-cad-configuration"><%= raw(json_escape(JSON.generate(@configuration))) %></script>
 <% content_for :header_tags do %>
