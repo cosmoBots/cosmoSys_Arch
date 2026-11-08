@@ -28,7 +28,8 @@ const initialize = viewer => {
     apply(); controls.fitVisible();
     status.textContent = panel.dataset.readyLabel;
     panel.dataset.ready = 'true';
-    // Diagnostic handle for browser regression tests, not an execution API.
+    // Shared client-local scene controller for piece-camera capture and tests.
+    // Runtime clients should continue using the validated batch event below.
     panel.archControls = controls;
     // Generic batch API for optional execution clients. Validate every value
     // before changing any slider; the model and its saved defaults stay intact.

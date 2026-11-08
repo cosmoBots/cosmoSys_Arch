@@ -27,7 +27,14 @@ export function initializePieceCamera(ModelControls, captureImage) {
       // event first, irrespective of the order of the two module scripts.
       await Promise.resolve();
       const config = JSON.parse(panel.querySelector('[data-piece-configuration]').textContent);
-      const controls = automatic ? new ModelControls(viewer, config) : document.querySelector('#arch-cad-controls').archControls;
+      let controls = automatic ? new ModelControls(viewer, config) : null;
+      // The viewer and slider modules can finish loading in either order.
+      for (let attempt = 0; !controls && attempt < 200; attempt++) {
+        const target = document.querySelector('#arch-cad-controls');
+        controls = target?.archControls;
+        if (controls || target?.dataset.error === 'true') break;
+        await new Promise(resolve => setTimeout(resolve, 50));
+      }
       if (!controls) throw new Error('CAD controls are not ready');
       if (automatic) controls.fitVisible();
       const request = async (method = 'GET', body) => {
