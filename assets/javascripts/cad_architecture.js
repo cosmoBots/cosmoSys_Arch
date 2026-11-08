@@ -26,6 +26,13 @@ const initialize = viewer => {
       apply();
     });
     apply(); controls.fitVisible();
+    // Upstream fits the complete attachment, including our masked geometry.
+    // In this context the toolbar must frame the selected piece instead.
+    viewer.element?.querySelector('[data-cad-action="fit"]')?.addEventListener('click', event => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      controls.fitVisible();
+    }, {capture:true});
     status.textContent = panel.dataset.readyLabel;
     panel.dataset.ready = 'true';
     // Shared client-local scene controller for piece-camera capture and tests.
