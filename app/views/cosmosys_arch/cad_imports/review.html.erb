@@ -8,6 +8,24 @@
   <%= hidden_field_tag :plan_digest, @plan.digest %><%= hidden_field_tag :choices_json, JSON.generate(@plan.choices.transform_values { |v| v.merge('visible' => v['visible'] ? '1' : '0') }) %>
   <div class="arch-preflight-layout" id="arch-cad-preflight" data-blocked="<%= @review_error.present? %>">
     <section class="arch-preflight-tree" aria-label="<%= l(:label_cosmosys_arch_nodes) %>">
+      <fieldset data-arch-filter data-matches-label="<%= l(:text_cosmosys_arch_filter_matches, matches: '%{matches}', affected: '%{affected}') %>"
+                data-worker-url="<%= asset_path('plugin_assets/cosmosys_arch/cad_filter_worker.js') %>"
+                data-applied-label="<%= l(:text_cosmosys_arch_filter_applied) %>" data-error-label="<%= l(:text_cosmosys_arch_filter_error) %>"
+                data-timeout-label="<%= l(:text_cosmosys_arch_filter_timeout) %>">
+        <legend><%= l(:label_cosmosys_arch_bulk_filter) %></legend>
+        <p><label><%= l(:label_cosmosys_arch_filter_query) %> <input data-filter-query maxlength="256"></label></p>
+        <p><label><input type="checkbox" data-filter-regex> <%= l(:label_cosmosys_arch_filter_regex) %></label>
+        <select data-filter-field aria-label="<%= l(:label_cosmosys_arch_filter_field) %>">
+          <option value="name"><%= l(:field_name) %></option><option value="path"><%= l(:label_cosmosys_arch_filter_path) %></option>
+        </select></p>
+        <p><select data-filter-action aria-label="<%= l(:label_cosmosys_arch_import_mode) %>">
+          <% %w[exclude include atomic].each do |mode| %><option value="<%= mode %>"><%= l("label_cosmosys_arch_mode_#{mode}") %></option><% end %>
+          <option value="hide"><%= l(:label_cosmosys_arch_filter_hide) %></option><option value="show"><%= l(:label_cosmosys_arch_filter_show) %></option>
+        </select></p>
+        <button type="button" data-filter-preview><%= l(:label_cosmosys_arch_filter_preview) %></button>
+        <button type="button" data-filter-apply disabled><%= l(:button_apply) %></button>
+        <p role="status" aria-live="polite"></p>
+      </fieldset>
       <p><button type="button" data-arch-expand><%= l(:label_cosmosys_arch_expand_all) %></button>
       <button type="button" data-arch-collapse><%= l(:label_cosmosys_arch_collapse_all) %></button></p>
       <p class="info"><%= l(:text_cosmosys_arch_tree_inspect) %></p>

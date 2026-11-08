@@ -1,4 +1,16 @@
 es:
+  label_cosmosys_arch_bulk_filter: Selección masiva
+  label_cosmosys_arch_filter_query: Nombre o expresión
+  label_cosmosys_arch_filter_regex: Expresión regular (sin distinguir mayúsculas)
+  label_cosmosys_arch_filter_field: Buscar en
+  label_cosmosys_arch_filter_path: Ruta CAD
+  label_cosmosys_arch_filter_hide: Ocultar geometría
+  label_cosmosys_arch_filter_show: Mostrar geometría
+  label_cosmosys_arch_filter_preview: Previsualizar coincidencias
+  text_cosmosys_arch_filter_matches: '%{matches} nodos coincidentes; %{affected} nodos en sus subárboles. Aún no se han cambiado decisiones.'
+  text_cosmosys_arch_filter_applied: Decisiones actualizadas. Repite la revisión antes de importar.
+  text_cosmosys_arch_filter_error: No se pudo evaluar el filtro. No se han cambiado decisiones.
+  text_cosmosys_arch_filter_timeout: El filtro agotó su tiempo. Simplifica la expresión; no se han cambiado decisiones.
   label_cosmosys_arch_piece_view: Vista de la pieza
   label_cosmosys_arch_restore_camera: Recuperar vista
   label_cosmosys_arch_save_camera: Guardar vista con nombre

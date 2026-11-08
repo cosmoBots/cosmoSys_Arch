@@ -97,6 +97,13 @@ is repeated. Invalid atomic/control combinations remain editable with an error.
 The preview endpoint uses the same editor permissions as the preflight and
 does not require or create imported items. GET review links are read-only.
 
+Use **Bulk selection** to match node names or CAD paths, optionally with a
+case-insensitive regular expression such as `DIN|M3`. Preview the matches
+before applying include/exclude/atomic or geometry-visibility decisions. An
+exclusion applies to the whole subtree. Repeat review before importing; no
+items are created by filtering. Invalid or overlong-running expressions leave
+the decisions unchanged.
+
 YAML can declare `rotation_order: YXZ` at model level, or override the order in
 a node transform. The default is XYZ; the six intrinsic Euler orders are
 accepted. Godot annotations normally need [YXZ](https://docs.godotengine.org/en/4.5/classes/class_node3d.html#class-node3d-property-rotation-order),

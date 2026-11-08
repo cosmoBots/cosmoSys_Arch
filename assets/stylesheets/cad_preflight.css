@@ -6,6 +6,8 @@
 .arch-node-row { display:inline-grid;gap:.3em;padding:.4em;vertical-align:top;max-width:100%;box-sizing:border-box }
 .arch-node-select { text-align:left;overflow-wrap:anywhere;font-weight:600 }
 .arch-node-select[aria-pressed=true] { background:#fff0bd;border-color:#916200 }
+.arch-cad-tree li[data-filter-match=true] > .arch-node-row,
+.arch-cad-tree li[data-filter-match=true] > details > summary > .arch-node-row { outline:2px solid #507bb5 }
 .arch-node-options { display:flex;flex-wrap:wrap;gap:.5em;align-items:center;font-size:.9em }
 .arch-cad-tree li[data-policy-skipped=true] > .arch-node-row,
 .arch-cad-tree li[data-policy-skipped=true] > details > summary > .arch-node-row { opacity:.5 }

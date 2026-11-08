@@ -70,6 +70,7 @@ export function initializeCadPreflight(ModelControls) {
     form.querySelector('[data-arch-confirm]').disabled = changed || panel.dataset.blocked === 'true';
   };
   policies();
+  initializeBulkFilter(panel, config.nodes, rows, policies);
   form.addEventListener('change', event => {
     if (event.target.matches('[data-arch-mode], [data-arch-visible]')) policies();
   });
@@ -109,4 +110,68 @@ export function initializeCadPreflight(ModelControls) {
   });
   const element = document.querySelector('[data-cad-preview]');
   if (element?.cadViewer) initialize(element.cadViewer);
+}
+
+export function affectedCadNodes(nodes, matches) {
+  const affected = new Set(matches);
+  for (const node of nodes) if (affected.has(node.parent)) affected.add(node.index);
+  return affected;
+}
+
+export function applyCadFilter(rows, matches, action) {
+  if (!['include', 'exclude', 'atomic', 'show', 'hide'].includes(action)) throw new Error('Invalid bulk action');
+  const selected = new Set(matches.map(String));
+  for (const row of rows) {
+    if (!selected.has(row.dataset.archNode)) continue;
+    if (action === 'show' || action === 'hide') row.querySelector('[data-arch-visible]').checked = action === 'show';
+    else row.querySelector('[data-arch-mode]').value = action;
+  }
+}
+
+function initializeBulkFilter(panel, nodes, rows, policies) {
+  const filter = panel.querySelector('[data-arch-filter]');
+  if (!filter) return;
+  const query = filter.querySelector('[data-filter-query]');
+  const regex = filter.querySelector('[data-filter-regex]');
+  const field = filter.querySelector('[data-filter-field]');
+  const action = filter.querySelector('[data-filter-action]');
+  const status = filter.querySelector('[role="status"]');
+  const apply = filter.querySelector('[data-filter-apply]');
+  let worker, timer, matches = null;
+  const clear = () => {
+    worker?.terminate(); clearTimeout(timer); worker = null; matches = null;
+    apply.disabled = true;
+    rows.forEach(row => delete row.dataset.filterMatch);
+    status.textContent = '';
+  };
+  filter.addEventListener('input', clear);
+  filter.addEventListener('change', clear);
+  filter.querySelector('[data-filter-preview]').addEventListener('click', () => {
+    clear();
+    try {
+      worker = new Worker(filter.dataset.workerUrl, {type:'module'});
+      const currentWorker = worker;
+      timer = setTimeout(() => {clear(); status.textContent = filter.dataset.timeoutLabel;}, 1500);
+      worker.onmessage = ({data}) => {
+        if (worker !== currentWorker) return;
+        worker.terminate(); worker = null; clearTimeout(timer);
+        if (data.error) { status.textContent = data.error; return; }
+        matches = data.indices;
+        const affected = affectedCadNodes(nodes, matches);
+        rows.forEach(row => row.dataset.filterMatch = String(matches.includes(Number(row.dataset.archNode))));
+        status.textContent = filter.dataset.matchesLabel.replace('%{matches}', matches.length).replace('%{affected}', affected.size);
+        apply.disabled = !matches.length;
+      };
+      worker.onerror = () => {clear(); status.textContent = filter.dataset.errorLabel;};
+      worker.postMessage({nodes, query:query.value, options:{regex:regex.checked, field:field.value}});
+    } catch (_) { clear(); status.textContent = filter.dataset.errorLabel; }
+  });
+  apply.addEventListener('click', () => {
+    if (!matches) return;
+    applyCadFilter(rows, matches, action.value);
+    policies();
+    status.textContent = filter.dataset.appliedLabel;
+    apply.disabled = true;
+  });
+  window.addEventListener('pagehide', clear, {once:true});
 }

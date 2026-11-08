@@ -1,4 +1,16 @@
 en:
+  label_cosmosys_arch_bulk_filter: Bulk selection
+  label_cosmosys_arch_filter_query: Name or expression
+  label_cosmosys_arch_filter_regex: Regular expression (case-insensitive)
+  label_cosmosys_arch_filter_field: Match against
+  label_cosmosys_arch_filter_path: CAD path
+  label_cosmosys_arch_filter_hide: Hide geometry
+  label_cosmosys_arch_filter_show: Show geometry
+  label_cosmosys_arch_filter_preview: Preview matches
+  text_cosmosys_arch_filter_matches: '%{matches} matching nodes; %{affected} nodes in their subtrees. No decisions changed yet.'
+  text_cosmosys_arch_filter_applied: Decisions updated. Repeat review before importing.
+  text_cosmosys_arch_filter_error: Could not evaluate the filter. No decisions changed.
+  text_cosmosys_arch_filter_timeout: Filter timed out. Simplify the expression; no decisions changed.
   label_cosmosys_arch_piece_view: Piece view
   label_cosmosys_arch_restore_camera: Restore view
   label_cosmosys_arch_save_camera: Save named view
