@@ -1,11 +1,16 @@
 # cosmoSys Architecture
 
-Version **0.1.6** (experimental).
+Version **0.1.7-dirty** (experimental).
 
 Imported architecture items show a static image of their CAD piece. Click it
 to open the interactive viewer. Sign in with permission to edit the item and
 save CAD attachment views to save a shared default camera or named views.
 The default camera is shared by all users; it is not a personal preference.
+
+Reports automatically include that piece's default PNG after the description,
+before fields and metadata, without adding a macro. The same image is used in
+HTML, ODT, DOCX and PDF. Pieces without a valid saved capture show a link to
+their viewer instead. There is currently no per-item or report visibility setting.
 
 Only camera and appearance are saved, not slider positions. Captures use the
 model's default positions without changing the temporary pose you are viewing.

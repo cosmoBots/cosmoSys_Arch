@@ -42,5 +42,31 @@ module CosmosysArch
       # A visible architecture item does not grant access to its source model.
       nil
     end
+
+    # Flat PNG for both HTML reports and server-side office/PDF export. Reuse
+    # the detail view's selection, signature and visibility checks, not a URL
+    # fetched by the exporter or a WebGL bootstrap inside a printed report.
+    def render_architecture_cad_report_figure(issue)
+      return unless issue.cosmosys_arch_node? && issue.visible?(User.current) &&
+        issue.project.csys_project_profile == 'architecture'
+
+      views = Presentation.new(issue).assigns.fetch(:@piece_views)
+      saved = views.find
+      unless views.current?(saved) && saved.image.visible?(User.current)
+        return content_tag(:p, safe_join([
+          l(:text_cad_preview_no_views), ' ', link_to(issue.subject, arch_cad_view_path(issue))
+        ]), class: 'cosmosys-arch-report-figure-missing')
+      end
+
+      png = File.binread(saved.image.diskfile)
+      width, height = CadPreviewView.png_dimensions(png)
+      content_tag(:p, image_tag("data:image/png;base64,#{Base64.strict_encode64(png)}",
+        alt: issue.subject, width: width, height: height, style: 'max-width:100%;height:auto'),
+        class: 'cosmosys-arch-report-figure', style: 'text-align:center')
+    rescue CosmosysArch::CadModel::Invalid => error
+      content_tag(:p, error.message, class: 'warning')
+    rescue Unauthorized
+      nil
+    end
   end
 end
