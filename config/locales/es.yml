@@ -1,4 +1,11 @@
 es:
+  label_cosmosys_arch_reset_import: Restablecer importación CAD
+  text_cosmosys_arch_reset_explanation: Se eliminará únicamente la configuración de la importación anterior de este ítem. Se conservarán el ítem, su CSID, historial, adjuntos y vistas guardadas. Después podrás seleccionar de nuevo el GLB y el YAML. No se borran hijos ni otros elementos automáticamente.
+  text_cosmosys_arch_reset_confirm: Confirmo que quiero descartar la configuración de importación anterior.
+  text_cosmosys_arch_reset_not_source: Este ítem no es el origen de una importación CAD que pueda restablecerse.
+  text_cosmosys_arch_reset_has_items: Todavía hay hijos o elementos vinculados a este modelo. Debes resolverlos antes de restablecer la importación, aunque se hayan movido fuera de este subárbol.
+  text_cosmosys_arch_reset_changed: La configuración ha cambiado. Abre de nuevo la confirmación antes de restablecerla.
+  text_cosmosys_arch_reset_done: Importación CAD restablecida. Se ha descartado la configuración anterior, conservando el ítem y sus adjuntos.
   label_cosmosys_arch_bulk_filter: Selección masiva
   label_cosmosys_arch_filter_query: Nombre o expresión
   label_cosmosys_arch_filter_regex: Expresión regular (sin distinguir mayúsculas)

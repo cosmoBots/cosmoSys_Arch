@@ -6,6 +6,9 @@
   </div>
 <% end %>
 <% if issue.project.csys_project_profile == 'architecture' && issue.has_attribute?(:arch_model_csid) %>
+  <% if issue.arch_model_csid.blank? && issue.cosmosys_arch_cad['model'] && issue.editable?(User.current) && User.current.allowed_to?(:add_issues, issue.project) %>
+    <p><%= link_to l(:label_cosmosys_arch_reset_import), arch_cad_reset_review_path(issue) %></p>
+  <% end %>
   <% model = issue.cosmosys_arch_model %>
   <% if model && model.visible?(User.current) %>
     <% if issue.cosmosys_arch_node? %>

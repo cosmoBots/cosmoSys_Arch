@@ -16,6 +16,13 @@ Only camera and appearance are saved, not slider positions. Captures use the
 model's default positions without changing the temporary pose you are viewing.
 Saved cameras are not yet included in project snapshots or copies.
 
+To reimport after removing an imported model's items, open its source item and
+choose **Reset CAD import**. Confirm on the next page; the GLB/YAML attachments,
+item identity, history and saved views are preserved. Reset is blocked while
+children or linked items remain, including items moved elsewhere in the project
+tree. Requires the same edit/import permissions as CAD import. Then select the
+files again and run the preflight; reset does not import anything itself.
+
 > **EXPERIMENTAL — opt-in:** This plugin is not part of the production core.
 > Expect defects, incomplete features, performance limits and breaking changes.
 > Do not install it if you require production-level stability and support.

@@ -1,4 +1,11 @@
 en:
+  label_cosmosys_arch_reset_import: Reset CAD import
+  text_cosmosys_arch_reset_explanation: Only this item's previous import configuration will be cleared. The item, CSID, history, attachments and saved views are preserved. You can then select the GLB and YAML again. Children and other items are never deleted automatically.
+  text_cosmosys_arch_reset_confirm: I confirm that I want to discard the previous import configuration.
+  text_cosmosys_arch_reset_not_source: This item is not the source of a CAD import that can be reset.
+  text_cosmosys_arch_reset_has_items: Children or items linked to this model still exist. Resolve them before resetting the import, even if they have moved outside this subtree.
+  text_cosmosys_arch_reset_changed: The configuration changed. Open the confirmation page again before resetting it.
+  text_cosmosys_arch_reset_done: CAD import reset. The previous configuration was discarded; the item and its attachments were preserved.
   label_cosmosys_arch_bulk_filter: Bulk selection
   label_cosmosys_arch_filter_query: Name or expression
   label_cosmosys_arch_filter_regex: Regular expression (case-insensitive)

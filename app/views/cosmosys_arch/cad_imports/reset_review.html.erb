@@ -1,0 +1,12 @@
+<h2><%= l(:label_cosmosys_arch_reset_import) %> — <%= @issue.subject %></h2>
+<p><%= l(:text_cosmosys_arch_reset_explanation) %></p>
+<% if @reset.blocked_reason %>
+  <p class="warning" role="alert"><%= l(@reset.blocked_reason) %></p>
+<% else %>
+  <%= form_tag arch_cad_reset_path(@issue) do %>
+    <%= hidden_field_tag :state_digest, @reset.digest %>
+    <p><label><%= check_box_tag :confirmed, '1', false, required: true %> <%= l(:text_cosmosys_arch_reset_confirm) %></label></p>
+    <%= submit_tag l(:label_cosmosys_arch_reset_import) %>
+  <% end %>
+<% end %>
+<p><%= link_to l(:button_cancel), issue_path(@issue) %></p>

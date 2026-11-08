@@ -1,12 +1,13 @@
 require 'fileutils'
 require 'tempfile'
 require_dependency File.expand_path('../../../lib/cosmosys_arch/cad_viewer', __dir__)
+require_dependency File.expand_path('../../../lib/cosmosys_arch/cad_import_reset', __dir__)
 
 module CosmosysArch
   class CadImportsController < ApplicationController
     include CosmosysArch::CadViewer
     before_action :find_issue
-    before_action :require_import_permission, only: %i[index review create preview]
+    before_action :require_import_permission, only: %i[index review create preview reset_review reset_import]
     before_action :load_model, only: :file
     # This action serves a fixed, public upstream JS source file, never user
     # data. ES modules are not XHRs. Keep CSRF checks on every write action.
@@ -16,6 +17,18 @@ module CosmosysArch
 
     def index
       @attachments = @issue.attachments.to_a
+    end
+
+    def reset_review
+      @reset = CadImportReset.new(@issue, user: User.current)
+    end
+
+    def reset_import
+      raise CadModel::Invalid, l(:text_cosmosys_arch_reset_confirm) unless params[:confirmed] == '1'
+
+      CadImportReset.new(@issue, user: User.current).call(expected_digest: params.require(:state_digest))
+      flash[:notice] = l(:text_cosmosys_arch_reset_done)
+      redirect_to arch_cad_import_path(@issue)
     end
 
     def review
