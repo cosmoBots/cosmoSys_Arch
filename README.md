@@ -1,6 +1,6 @@
 # cosmoSys Architecture
 
-Version **0.1.7-dirty** (experimental).
+Version **0.1.7** (experimental).
 
 Imported architecture items show a static image of their CAD piece. Click it
 to open the interactive viewer. Sign in with permission to edit the item and
@@ -42,9 +42,9 @@ traceability is deferred.
 ## Requirements
 
 - Redmine 7.0.1
-- [cosmoSys](https://github.com/cosmoBots/cosmoSys) 0.2.8 or later
-- [cosmoSys Requirements](https://github.com/cosmoBots/cosmoSys_Req) 0.3.5 or later
-- [cosmoSys CAD Preview](https://github.com/cosmoBots/cosmoSys_cad_preview) 0.1.7 or later
+- [cosmoSys](https://github.com/cosmoBots/cosmoSys) 0.2.10 or later
+- [cosmoSys Requirements](https://github.com/cosmoBots/cosmoSys_Req) 0.3.6 or later
+- [cosmoSys CAD Preview](https://github.com/cosmoBots/cosmoSys_cad_preview) 0.1.8 or later
 
 Architecture projects use the base cosmoSys trackers plus `archNode` and
 `archDoF`; they do not enable requirement trackers.
