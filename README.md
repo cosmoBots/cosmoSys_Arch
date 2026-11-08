@@ -9,8 +9,13 @@ The default camera is shared by all users; it is not a personal preference.
 
 Reports automatically include that piece's default PNG after the description,
 before fields and metadata, without adding a macro. The same image is used in
-HTML, ODT, DOCX and PDF. Pieces without a valid saved capture show a link to
-their viewer instead. There is currently no per-item or report visibility setting.
+HTML, ODT, DOCX and PDF. Automatic report figures are at most 450 px high
+(about 11.9 cm in print), preserving their aspect ratio and original PNG.
+Opening the HTML report prepares missing captures one at a time. They are
+saved only if you can edit the item and save CAD views; otherwise they remain
+available on that page only. Exports wait for preparation to finish. Direct
+server exports cannot render missing CAD captures and show a viewer link.
+There is currently no per-item or report visibility setting.
 
 Only camera and appearance are saved, not slider positions. Captures use the
 model's default positions without changing the temporary pose you are viewing.

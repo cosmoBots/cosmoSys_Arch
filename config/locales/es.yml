@@ -1,4 +1,6 @@
 es:
+  text_cosmosys_arch_report_capture_timeout: No se pudo preparar la figura a tiempo. Abre el visor de la pieza para volver a intentarlo.
+  text_cosmosys_arch_report_capture_unsaved: La figura sólo está disponible en esta página. Un usuario con permisos de edición y guardado debe generar la captura para incluirla en las exportaciones.
   label_cosmosys_arch_reset_import: Restablecer importación CAD
   text_cosmosys_arch_reset_explanation: Se eliminará únicamente la configuración de la importación anterior de este ítem. Se conservarán el ítem, su CSID, historial, adjuntos y vistas guardadas. Después podrás seleccionar de nuevo el GLB y el YAML. No se borran hijos ni otros elementos automáticamente.
   text_cosmosys_arch_reset_confirm: Confirmo que quiero descartar la configuración de importación anterior.

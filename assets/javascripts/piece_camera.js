@@ -1,7 +1,6 @@
 // Camera/appearance only. PNGs are captured at default DoF values; no runtime
 // state is stored or commanded, including when the visible sliders were moved.
-export function initializePieceCamera(ModelControls, captureImage) {
-  const panel = document.querySelector('[data-piece-camera]');
+export function initializePieceCamera(ModelControls, captureImage, panel = document.querySelector('[data-piece-camera]'), completed = () => {}, signal) {
   if (!panel || panel.dataset.initialized) return;
   panel.dataset.initialized = 'true';
   const automatic = panel.dataset.automatic === 'true';
@@ -38,7 +37,7 @@ export function initializePieceCamera(ModelControls, captureImage) {
       if (!controls) throw new Error('CAD controls are not ready');
       if (automatic) controls.fitVisible();
       const request = async (method = 'GET', body) => {
-        const response = await fetch(panel.dataset.url, {method, headers: {'Content-Type':'application/json',
+        const response = await fetch(panel.dataset.url, {method, signal, headers: {'Content-Type':'application/json',
           'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.content || ''},
           ...(body ? {body:JSON.stringify(body)} : {})});
         const result = await response.json();
@@ -88,10 +87,13 @@ export function initializePieceCamera(ModelControls, captureImage) {
         const image = wrapper.querySelector('[data-piece-generated-image]');
         image.querySelector('img').src = capture.image;
         image.hidden = false;
+        wrapper.querySelector('[data-piece-fallback]')?.setAttribute('hidden', '');
         status.textContent = '';
         if (!defaultView?.current && panel.dataset.canSave === 'true') {
           try { await save('default', capture); }
           catch (error) { if (error.status !== 409) status.textContent = error.message; }
+        } else if (!defaultView?.current && wrapper.dataset?.reportPiece !== undefined) {
+          status.textContent = wrapper.dataset.unsavedLabel;
         }
         // Remove the temporary renderer from the page once the PNG is ready.
         release();
@@ -120,8 +122,15 @@ export function initializePieceCamera(ModelControls, captureImage) {
       status.textContent = error.message;
       panel.dataset.error = 'true';
       release();
+    } finally {
+      if (automatic) completed();
     }
   };
   element.addEventListener('cad-preview:ready', event => start(event.detail.viewer));
+  element.addEventListener('cad-preview:error', () => {
+    status.textContent = element.querySelector('.cad-preview-status')?.textContent || 'CAD loading failed';
+    panel.dataset.error = 'true';
+    if (automatic) completed();
+  });
   if (element.cadViewer) start(element.cadViewer);
 }

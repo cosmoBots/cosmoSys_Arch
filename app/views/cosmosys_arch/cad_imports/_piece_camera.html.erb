@@ -23,6 +23,11 @@
     import {captureImage} from <%= raw(arch_cad_capture_module_path(@issue).to_json) %>;
     import {ModelControls} from <%= raw(asset_path('plugin_assets/cosmosys_cad_preview/model_controls.js').to_json) %>;
     import {initializePieceCamera} from <%= raw(asset_path('plugin_assets/cosmosys_arch/piece_camera.js').to_json) %>;
-    initializePieceCamera(ModelControls, captureImage);
+    <% if local_assigns[:report] %>
+      import {initializeReportPieceCameras} from <%= raw(asset_path('plugin_assets/cosmosys_arch/report_piece_cameras.js').to_json) %>;
+      initializeReportPieceCameras(ModelControls, captureImage, initializePieceCamera);
+    <% else %>
+      initializePieceCamera(ModelControls, captureImage);
+    <% end %>
   </script>
 <% end %>

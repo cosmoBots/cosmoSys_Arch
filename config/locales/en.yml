@@ -1,4 +1,6 @@
 en:
+  text_cosmosys_arch_report_capture_timeout: The figure could not be prepared in time. Open the piece viewer to try again.
+  text_cosmosys_arch_report_capture_unsaved: The figure is only available on this page. A user with edit and view-saving permissions must generate the capture to include it in exported reports.
   label_cosmosys_arch_reset_import: Reset CAD import
   text_cosmosys_arch_reset_explanation: Only this item's previous import configuration will be cleared. The item, CSID, history, attachments and saved views are preserved. You can then select the GLB and YAML again. Children and other items are never deleted automatically.
   text_cosmosys_arch_reset_confirm: I confirm that I want to discard the previous import configuration.
