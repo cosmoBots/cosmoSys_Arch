@@ -2,36 +2,19 @@
 
 Version **0.1.6-dirty** (experimental, development).
 
-Imported `archNode` items show a static PNG of their CAD piece/subtree, without
-a macro, sliders or nested Redmine page. Clicking the PNG or the CAD link opens
-the same interactive viewer. The existing `arch_model_csid` locates the
-source item and `arch_node_key` records the GLB node index assigned at import.
-These references assume the imported CAD revision remains unchanged; UUIDs,
-revision reconciliation and automatic report insertion are future work, not
-part of this change. Existing imports need no regeneration or new migration.
-Source item and attachment visibility checks still apply. A missing PNG is
-generated once in a temporary browser renderer, then that renderer is removed.
-Editors with upstream saved-view permission can persist it for later visits;
-read-only visitors receive an in-memory PNG without writing data.
+Imported architecture items show a static image of their CAD piece. Click it
+to open the interactive viewer. Sign in with permission to edit the item and
+save CAD attachment views to save a shared default camera or named views.
+The default camera is shared by all users; it is not a personal preference.
 
-The viewer can save/restore the piece's shared default camera and named views.
-Storage reuses upstream `CadPreviewView`/PNG attachments, scoped by source CAD
-and node index, without changing the whole attachment's default camera and
-without a schema migration. Camera and appearance are saved, **not DoF values**:
-the PNG always uses default DoF values, leaving the visible temporary pose
-unchanged. Simulation/PORIS views do not expose these editorial controls.
-Snapshots/copies of saved cameras remain outside the current contract.
-
-Temporary CAD views use Redmine CAD Preview's native readonly partial through
-cosmosys_cad_preview 0.1.7+. Preflight and PORIS–CAD poses cannot be saved through
-their toolbar. No attachment-layout override or duplicate report toolbar is used.
+Only camera and appearance are saved, not slider positions. Captures use the
+model's default positions without changing the temporary pose you are viewing.
+Saved cameras are not yet included in project snapshots or copies.
 
 > **EXPERIMENTAL — opt-in:** This plugin is not part of the production core.
 > Expect defects, incomplete features, performance limits and breaking changes.
 > Do not install it if you require production-level stability and support.
 
-Historical migration data access uses ActiveRecord for database portability.
-The dependency minimums below select the matching base and Requirements fixes.
 
 `cosmosys_arch` adds an architecture/PBS project profile to cosmoSys. Its
 `archNode` items form an unrestricted-depth parent/child hierarchy and carry a
@@ -45,12 +28,9 @@ traceability is deferred.
 - [cosmoSys](https://github.com/cosmoBots/cosmoSys) 0.2.8 or later
 - [cosmoSys Requirements](https://github.com/cosmoBots/cosmoSys_Req) 0.3.5 or later
 - [cosmoSys CAD Preview](https://github.com/cosmoBots/cosmoSys_cad_preview) 0.1.7 or later
-  (`model_controls.js` module).
 
-The requirement plugin is an explicit dependency for the shared workflow and
-future modular traceability work. The Architecture project profile does not
-enable requirement trackers: new PBS projects receive the base cosmoSys
-trackers—including `csNegative`—plus `archNode` and `archDoF`.
+Architecture projects use the base cosmoSys trackers plus `archNode` and
+`archDoF`; they do not enable requirement trackers.
 
 ## Installation
 
@@ -65,9 +45,10 @@ RAILS_ENV=production bundle exec rake redmine:plugins:migrate NAME=cosmosys_req
 RAILS_ENV=production bundle exec rake redmine:plugins:migrate NAME=cosmosys_arch
 ```
 
-The local workspace Compose mounts this plugin under a late-sorting directory
-name because Redmine loads plugin initializers alphabetically; its registered
-plugin ID remains `cosmosys_arch`.
+Back up the database and files before migrating. Removing the CAD schema is
+refused while it contains imported architecture data; do not use rollback as a
+way to discard an existing model.
+
 
 Create a project with the **Product architecture (PBS)** profile. It uses
 `csInfo` as the structural root, allows architecture nodes under other
@@ -97,14 +78,15 @@ Limits, default, axis, local/global space and step are native fields. Rotation
 uses degrees; translation uses metres. YAML rest/default is zero.
 
 The node viewer isolates the selected subtree and offers its DoF sliders plus
-reset. Slider poses are temporary, not saved as report poses. It reuses the
-upstream viewer unchanged, with generic controls supplied by our CAD plugin.
-Architecture opts out of editorial report tools only for its preflight and
-temporary model views; it does not override or hide the CAD integration's
-report-tool partial in ordinary attachment/embedded viewers.
-The original GLB remains untouched; a cached derivative adds per-file node
-indices for viewer binding. Re-export/synchronization needs stable identities
-in a future iteration; indices are not cross-version UUIDs.
+reset. Slider poses are temporary and do not change the original GLB or saved
+camera. Keep the imported model unchanged: updating an existing import to a new
+CAD revision is not supported yet.
+
+To save a camera, sign in and click the piece image. Adjust the view and choose
+**Save as default** to use it on the item's detail page, or enter a name
+and save a named view. The selector lists saved views; use **Restore view** to
+return to one. Saving requires both item-editing and CAD attachment-view
+permissions. Anonymous visitors can view public pieces but cannot save cameras.
 
 The preflight starts with a collapsed tree and a CAD preview beside it. Click
 a node name to isolate its complete geometric subtree, or highlight it in the
@@ -121,24 +103,9 @@ accepted. Godot annotations normally need [YXZ](https://docs.godotengine.org/en/
 not Three.js's default XYZ. This changes the interpretation of Euler offsets,
 not the original GLB quaternion, and does not change control-axis names.
 
-Migration 002 uses only Rails schema/ActiveRecord APIs. Rollback refuses to
-discard populated CAD architecture data. Snapshot/copy fields include model
-configuration and remap model CSIDs. The restored hierarchy identifies each
-DoF's controlled node, with parent validation after restore.
-Keep the model's GLB/YAML attachments together with its source item.
-
-Future formulas/connectors will express dependencies between parameters and
-subordinate DoFs (for example, a leaf opening driving piston motions). They
-will not redirect one object's DoF to another object. These dependencies and
-YAML export of manually edited controls are not implemented yet.
-
-Initial evaluation focuses on NRT (26 nodes, four controls). Its minimal YAML
-comes from `main.yaml`; original gallery annotations are preserved. BancoIFU
-is deferred: the collapsed tree/preview is implemented, but that large model
-has not been validated. STEP, Blender conversion, PORIS/MQTT,
-reimport/reconciliation and persistent poses are not implemented. Blender is
-a possible annotation/rest-pose authoring tool; do not apply its corrected
-rest pose and old YAML offsets together without reviewing the convention.
+Keep the GLB and any YAML annotation with the source item so project
+snapshots and copies can include them. Parameter coupling, STEP import,
+reimport/reconciliation and saved motion poses are not supported yet.
 
 The current viewer/importer does not load `.blend` files directly. Keep Blender
 as the editable source and export a GLB retaining node names and hierarchy.
