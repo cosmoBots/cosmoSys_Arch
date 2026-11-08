@@ -22,6 +22,7 @@ require_dependency File.expand_path('lib/cosmosys_arch/issue_patch', __dir__)
 require_dependency File.expand_path('lib/cosmosys_arch/issue_query_patch', __dir__)
 require_dependency File.expand_path('lib/cosmosys_arch/ods_fields', __dir__)
 require_dependency File.expand_path('lib/cosmosys_arch/hooks', __dir__)
+require_dependency File.expand_path('lib/cosmosys_arch/piece_views', __dir__)
 require_dependency File.expand_path('app/helpers/cosmosys_arch/cad_items_helper', __dir__)
 ActionView::Base.include CosmosysArch::CadItemsHelper unless ActionView::Base < CosmosysArch::CadItemsHelper
 

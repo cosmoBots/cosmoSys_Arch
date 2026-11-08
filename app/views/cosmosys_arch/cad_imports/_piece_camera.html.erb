@@ -1,0 +1,28 @@
+<div data-piece-camera data-automatic="<%= local_assigns[:automatic] ? 'true' : 'false' %>"
+     data-read-only="<%= local_assigns[:readonly] ? 'true' : 'false' %>"
+     data-url="<%= arch_cad_piece_views_path(@issue) %>" data-can-save="<%= !local_assigns[:readonly] && @issue.editable?(User.current) && CadPreviewView.editable?(@attachment, User.current) %>"
+     data-default-label="<%= l(:label_default) %>" data-saved-label="<%= l(:text_cad_preview_view_saved) %>"
+     data-restored-label="<%= l(:label_cosmosys_arch_restore_camera) %>">
+  <% if local_assigns[:readonly] %>
+    <p role="status" hidden></p>
+  <% elsif !local_assigns[:automatic] %>
+    <p class="info"><%= l(:text_cosmosys_arch_camera_defaults) %></p>
+    <select data-piece-choice aria-label="<%= l(:label_cosmosys_arch_piece_view) %>"></select>
+    <button type="button" data-piece-restore><%= l(:label_cosmosys_arch_restore_camera) %></button>
+    <% if @issue.editable?(User.current) && CadPreviewView.editable?(@attachment, User.current) %>
+      <input data-piece-name value="default" maxlength="40" aria-label="<%= l(:label_cosmosys_arch_piece_view) %>">
+      <button type="button" data-piece-save><%= l(:label_cosmosys_arch_save_camera) %></button>
+      <button type="button" data-piece-default><%= l(:label_cosmosys_arch_save_default_camera) %></button>
+    <% end %>
+    <p role="status" aria-live="polite"></p>
+  <% end %>
+  <script type="application/json" data-piece-configuration><%= raw(json_escape(JSON.generate(@configuration))) %></script>
+</div>
+<% content_for :header_tags do %>
+  <script type="module">
+    import {captureImage} from <%= raw(arch_cad_capture_module_path(@issue).to_json) %>;
+    import {ModelControls} from <%= raw(asset_path('plugin_assets/cosmosys_cad_preview/model_controls.js').to_json) %>;
+    import {initializePieceCamera} from <%= raw(asset_path('plugin_assets/cosmosys_arch/piece_camera.js').to_json) %>;
+    initializePieceCamera(ModelControls, captureImage);
+  </script>
+<% end %>

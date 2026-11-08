@@ -1,4 +1,9 @@
 es:
+  label_cosmosys_arch_piece_view: Vista de la pieza
+  label_cosmosys_arch_restore_camera: Recuperar vista
+  label_cosmosys_arch_save_camera: Guardar vista con nombre
+  label_cosmosys_arch_save_default_camera: Guardar como predeterminada
+  text_cosmosys_arch_camera_defaults: La captura guarda cámara y apariencia, con los grados de libertad en sus valores predeterminados; no guarda la pose temporal.
   label_cosmosys_arch_project_profile: Arquitectura de producto (PBS)
   text_cosmosys_arch_project_profile: Proyecto con una estructura de descomposición del producto. Los nodos de arquitectura pueden contener otros nodos sin límite fijo de profundidad.
   label_cosmosys_arch_item_profile_node: Nodo de arquitectura

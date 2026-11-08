@@ -1,6 +1,7 @@
 <% unless local_assigns[:poris_simulation] %>
   <p class="info"><%= l(:text_cosmosys_arch_pose_temporary) %></p>
 <% end %>
+<%= render partial: 'cosmosys_arch/cad_imports/piece_camera', locals: {readonly: local_assigns[:poris_simulation]} %>
 <div class="cosmosys-arch-viewer" style="display:grid;grid-template-columns:minmax(240px,30%) minmax(0,1fr);gap:1em">
   <div id="arch-cad-controls" data-ready-label="<%= l(:label_cosmosys_arch_controls_ready) %>">
     <h3><%= l(:label_cosmosys_arch_dofs) %></h3>
@@ -27,5 +28,5 @@
     import {initializeArchitectureControls} from <%= raw(asset_path('plugin_assets/cosmosys_arch/cad_architecture.js').to_json) %>;
     initializeArchitectureControls(ModelControls, document.getElementById(<%= raw((@architecture_inline_issue ? "architecture-cad-item-#{@architecture_inline_issue.id}" : '').to_json) %>) || document);
   </script>
-  <style>.cosmosys-arch-viewer .cad-preview-canvas { height:65vh;min-height:400px } .cosmosys-arch-viewer [data-arch-control] { width:80% }</style>
+  <style>.cosmosys-arch-viewer .cad-preview-canvas { height:65vh;min-height:400px } .cosmosys-arch-viewer [data-arch-control] { width:80% } .cosmosys-arch-viewer .cad-preview-toolbar-group:has([data-cad-view]) { display:none }</style>
 <% end %>

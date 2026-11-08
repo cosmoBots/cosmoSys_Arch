@@ -1,0 +1,13 @@
+<% saved = @piece_views.find %>
+<% if @piece_views.current?(saved) && saved.image.visible?(User.current) %>
+  <%= link_to image_tag(arch_cad_piece_image_path(@issue), alt: @issue.subject, style: 'max-width:100%;max-height:550px'), arch_cad_view_path(@issue), class: 'architecture-piece-image' %>
+<% else %>
+  <div data-architecture-piece-bootstrap>
+    <p role="status"><%= l(:label_loading) %></p>
+    <a data-piece-generated-image href="<%= arch_cad_view_path(@issue) %>" hidden><img alt="<%= @issue.subject %>" style="max-width:100%;max-height:550px"></a>
+    <div data-piece-renderer style="position:absolute;left:-10000px;width:800px;height:600px;overflow:hidden" aria-hidden="true" inert>
+      <%= render partial: 'cosmosys_cad_preview/temporary_viewer' %>
+    </div>
+    <%= render partial: 'cosmosys_arch/cad_imports/piece_camera', locals: {automatic: true} %>
+  </div>
+<% end %>

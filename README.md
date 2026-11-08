@@ -2,14 +2,25 @@
 
 Version **0.1.6-dirty** (experimental, development).
 
-Imported `archNode` items automatically embed their CAD piece/subtree, without
-a macro or nested Redmine page. The existing `arch_model_csid` locates the
+Imported `archNode` items show a static PNG of their CAD piece/subtree, without
+a macro, sliders or nested Redmine page. Clicking the PNG or the CAD link opens
+the same interactive viewer. The existing `arch_model_csid` locates the
 source item and `arch_node_key` records the GLB node index assigned at import.
 These references assume the imported CAD revision remains unchanged; UUIDs,
-revision reconciliation and independent report figures are future work, not
+revision reconciliation and automatic report insertion are future work, not
 part of this change. Existing imports need no regeneration or new migration.
-Source item and attachment visibility checks still apply. Piece controls are
-temporary and cannot overwrite the complete attachment's saved cameras.
+Source item and attachment visibility checks still apply. A missing PNG is
+generated once in a temporary browser renderer, then that renderer is removed.
+Editors with upstream saved-view permission can persist it for later visits;
+read-only visitors receive an in-memory PNG without writing data.
+
+The viewer can save/restore the piece's shared default camera and named views.
+Storage reuses upstream `CadPreviewView`/PNG attachments, scoped by source CAD
+and node index, without changing the whole attachment's default camera and
+without a schema migration. Camera and appearance are saved, **not DoF values**:
+the PNG always uses default DoF values, leaving the visible temporary pose
+unchanged. Simulation/PORIS views do not expose these editorial controls.
+Snapshots/copies of saved cameras remain outside the current contract.
 
 Temporary CAD views use Redmine CAD Preview's native readonly partial through
 cosmosys_cad_preview 0.1.7+. Preflight and PORIS–CAD poses cannot be saved through

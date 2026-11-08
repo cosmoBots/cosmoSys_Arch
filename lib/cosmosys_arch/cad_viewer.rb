@@ -47,6 +47,7 @@ module CosmosysArch
             'motion' => item.arch_motion, 'space' => item.arch_space, 'axis' => item.arch_axis,
             'default' => item.arch_default, 'min' => item.arch_min, 'max' => item.arch_max, 'step' => item.arch_step }
         end)
+      @piece_views = CosmosysArch::PieceViews.new(@attachment, @cad_report_view_name, @configuration)
       prepend_view_path File.expand_path('../../app/views', __dir__) if prepend_paths
     end
     # Reuse the upstream viewer template, but serve our annotated derivative.

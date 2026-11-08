@@ -30,7 +30,7 @@ module CosmosysArch
       previous = assigns.keys.to_h { |name| [name, [instance_variable_defined?(name), instance_variable_get(name)]] }
       begin
         assigns.each { |name, value| instance_variable_set(name, value) }
-        render partial: 'cosmosys_arch/cad_imports/viewer'
+        render partial: 'cosmosys_arch/cad_imports/piece_image'
       ensure
         previous.each do |name, (defined, value)|
           defined ? instance_variable_set(name, value) : remove_instance_variable(name)

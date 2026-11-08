@@ -1,4 +1,9 @@
 en:
+  label_cosmosys_arch_piece_view: Piece view
+  label_cosmosys_arch_restore_camera: Restore view
+  label_cosmosys_arch_save_camera: Save named view
+  label_cosmosys_arch_save_default_camera: Save as default
+  text_cosmosys_arch_camera_defaults: The capture saves camera and appearance at default degree-of-freedom values; it does not save the temporary pose.
   label_cosmosys_arch_project_profile: Product architecture (PBS)
   text_cosmosys_arch_project_profile: Product Breakdown Structure project. Architecture nodes can contain other architecture nodes without a fixed depth limit.
   label_cosmosys_arch_item_profile_node: Architecture node

@@ -8,6 +8,9 @@ module CosmosysArch
     before_action :find_issue
     before_action :require_import_permission, only: %i[index review create preview]
     before_action :load_model, only: :file
+    # This action serves a fixed, public upstream JS source file, never user
+    # data. ES modules are not XHRs. Keep CSRF checks on every write action.
+    skip_after_action :verify_same_origin_request, only: :capture_module
     helper_method :cad_preview_file_path
     rescue_from CosmosysArch::CadModel::Invalid, with: :invalid_model
 
@@ -52,7 +55,47 @@ module CosmosysArch
       serve_annotated_file(@attachment, @yaml)
     end
 
+    def capture_module
+      load_model
+      # Reuse the installed upstream capture implementation, not a fork/copy.
+      send_file File.join(Redmine::Plugin.find(:redmine_cad_preview).directory, 'frontend/src/saved_views.js'),
+        type: 'text/javascript', disposition: 'inline'
+    end
+
+    def piece_views
+      prepare_architecture_view
+      render json: {signature: @piece_views.signature, views: @piece_views.all.map { |view| piece_view_json(view) }}
+    end
+
+    def save_piece_view
+      prepare_architecture_view
+      raise Unauthorized unless @issue.editable?(User.current) && CadPreviewView.editable?(@attachment, User.current)
+      attributes = params.require(:view).to_unsafe_h
+      saved = @piece_views.save!(params[:name], user: User.current, attributes: attributes)
+      render json: {view: piece_view_json(saved)}
+    rescue RedmineCadPreview::Views::Conflict, ActiveRecord::StaleObjectError, ActiveRecord::RecordNotUnique
+      render json: {error: 'The view changed; reload before saving'}, status: 409
+    rescue ArgumentError, KeyError, ActiveRecord::RecordInvalid => error
+      render json: {error: error.message}, status: 422
+    end
+
+    def piece_image
+      prepare_architecture_view
+      view = @piece_views.find(params[:name])
+      return render_404 unless @piece_views.current?(view) && view.image.visible?(User.current)
+      response.headers['Cache-Control'] = 'private, no-store'
+      send_file view.image.diskfile, type: 'image/png', disposition: 'inline'
+    rescue ArgumentError
+      render_404
+    end
+
     private
+
+    def piece_view_json(view)
+      {name: view.name == @piece_views.prefix ? 'default' : view.name.delete_prefix("#{@piece_views.prefix}--"),
+        revision: view.revision, state: view.state.except('architecture_signature'), current: @piece_views.current?(view),
+        image_url: arch_cad_piece_image_path(@issue, name: view.name == @piece_views.prefix ? 'default' : view.name.delete_prefix("#{@piece_views.prefix}--"))}
+    end
 
     def serve_annotated_file(attachment, yaml)
       cache = Rails.root.join('tmp', 'cosmosys_arch_glb')
