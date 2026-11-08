@@ -46,7 +46,7 @@ module CosmosysArch
       return if Cosmosys::ItemKindRegistry.registered?('arch_dof')
       Cosmosys::ItemKindRegistry.register(
         'arch_dof', label: :label_cosmosys_arch_dof, description: :text_cosmosys_arch_dof,
-        provider: :cosmosys_arch, diagram_shape: 'ellipse', can_have_children: false,
+        provider: :cosmosys_arch, diagram_shape: 'parallelogram', can_have_children: false,
         can_split: false, aggregate_children: false, allowed_parent_profiles: %w[arch_node],
         allowed_child_profiles: [], dsm_mode: 'none', closed_presentation: 'consolidated'
       )
