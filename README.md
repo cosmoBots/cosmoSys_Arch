@@ -1,6 +1,6 @@
 # cosmoSys Architecture
 
-Version **0.1.6-dirty** (experimental, development).
+Version **0.1.6** (experimental).
 
 Imported architecture items show a static image of their CAD piece. Click it
 to open the interactive viewer. Sign in with permission to edit the item and
