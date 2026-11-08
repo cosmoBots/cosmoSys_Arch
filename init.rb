@@ -5,7 +5,7 @@ Redmine::Plugin.register :cosmosys_arch do
   name 'cosmoSys Architecture'
   author 'cosmoBots.eu'
   description 'Product architecture profiles for cosmoSys.'
-  version '0.1.5'
+  version '0.1.6-dirty'
   url 'https://cosmobots.eu'
   author_url 'https://cosmobots.eu'
 
@@ -22,6 +22,8 @@ require_dependency File.expand_path('lib/cosmosys_arch/issue_patch', __dir__)
 require_dependency File.expand_path('lib/cosmosys_arch/issue_query_patch', __dir__)
 require_dependency File.expand_path('lib/cosmosys_arch/ods_fields', __dir__)
 require_dependency File.expand_path('lib/cosmosys_arch/hooks', __dir__)
+require_dependency File.expand_path('app/helpers/cosmosys_arch/cad_items_helper', __dir__)
+ActionView::Base.include CosmosysArch::CadItemsHelper unless ActionView::Base < CosmosysArch::CadItemsHelper
 
 class CosmosysArchMaterializationListener < Redmine::Hook::Listener
   def after_plugins_loaded(_context = {})

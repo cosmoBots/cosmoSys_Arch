@@ -1,6 +1,15 @@
 # cosmoSys Architecture
 
-Version **0.1.5** (experimental).
+Version **0.1.6-dirty** (experimental, development).
+
+Imported `archNode` items automatically embed their CAD piece/subtree, without
+a macro or nested Redmine page. The existing `arch_model_csid` locates the
+source item and `arch_node_key` records the GLB node index assigned at import.
+These references assume the imported CAD revision remains unchanged; UUIDs,
+revision reconciliation and independent report figures are future work, not
+part of this change. Existing imports need no regeneration or new migration.
+Source item and attachment visibility checks still apply. Piece controls are
+temporary and cannot overwrite the complete attachment's saved cameras.
 
 Temporary CAD views use Redmine CAD Preview's native readonly partial through
 cosmosys_cad_preview 0.1.7+. Preflight and PORIS–CAD poses cannot be saved through

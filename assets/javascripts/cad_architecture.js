@@ -1,10 +1,10 @@
-export function initializeArchitectureControls(ModelControls) {
+export function initializeArchitectureControls(ModelControls, root = document) {
 const initialize = viewer => {
-  const panel = document.getElementById('arch-cad-controls');
+  const panel = root.querySelector('#arch-cad-controls');
   if (!panel || panel.dataset.ready === 'true') return;
   const status = panel.querySelector('[role="status"]');
   try {
-    const configuration = JSON.parse(document.getElementById('arch-cad-configuration').textContent);
+    const configuration = JSON.parse(root.querySelector('#arch-cad-configuration').textContent);
     const controls = new ModelControls(viewer, configuration);
     const inputs = [...panel.querySelectorAll('[data-arch-control]')];
     let values = Object.fromEntries(inputs.map(input => [input.dataset.archControl, Number(input.value)]));
@@ -62,7 +62,9 @@ const initialize = viewer => {
     panel.dataset.error = 'true';
   }
 };
-document.addEventListener('cad-preview:ready', event => initialize(event.detail.viewer));
-const viewer = document.querySelector('[data-cad-preview]')?.cadViewer;
+root.addEventListener('cad-preview:ready', event => {
+  if (event.target === root.querySelector('[data-cad-preview]')) initialize(event.detail.viewer);
+});
+const viewer = root.querySelector('[data-cad-preview]')?.cadViewer;
 if (viewer) initialize(viewer);
 }

@@ -9,6 +9,11 @@
   <% model = issue.cosmosys_arch_model %>
   <% if model && model.visible?(User.current) %>
     <p><%= link_to l(:label_cosmosys_arch_cad_model), arch_cad_view_path(issue) %></p>
+    <% if issue.cosmosys_arch_node? %>
+      <div class="cosmosys-arch-inline-cad" id="architecture-cad-item-<%= issue.id %>">
+        <%= render_architecture_cad_item(issue) %>
+      </div>
+    <% end %>
   <% elsif issue.editable?(User.current) && User.current.allowed_to?(:add_issues, issue.project) %>
     <p><%= link_to l(:label_cosmosys_arch_cad_import), arch_cad_import_path(issue) %></p>
   <% end %>

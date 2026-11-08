@@ -4,7 +4,7 @@ module CosmosysArch
   module CadViewer
     private
 
-    def prepare_architecture_view
+    def prepare_architecture_view(prepend_paths: true)
       load_model
       # Slider poses are session-local, not editorial report views.
       @cad_format, @cad_snapshot, @cad_image = 'glb', false, nil
@@ -13,6 +13,9 @@ module CosmosysArch
       selected = @issue.arch_node_key.presence || @issue.cosmosys_arch_parent_node&.arch_node_key
       @cad_report_view_name = selected ? "arch-node-#{selected}" : 'arch-model'
       nodes = @spec.fetch('model').fetch('nodes')
+      if @issue.cosmosys_arch_node? && (selected.nil? || nodes.none? { |node| node['index'].to_s == selected })
+        raise CadModel::Invalid, 'The architecture item has no valid CAD node reference'
+      end
       subtree = {}
       nodes.each { |node| subtree[node['index']] = true if selected.nil? || node['index'].to_s == selected || subtree[node['parent']] }
       target_items = @node_items.select { |item| item.cosmosys_arch_node? && subtree[item.arch_node_key.to_i] }
@@ -44,7 +47,7 @@ module CosmosysArch
             'motion' => item.arch_motion, 'space' => item.arch_space, 'axis' => item.arch_axis,
             'default' => item.arch_default, 'min' => item.arch_min, 'max' => item.arch_max, 'step' => item.arch_step }
         end)
-      prepend_view_path File.expand_path('../../app/views', __dir__)
+      prepend_view_path File.expand_path('../../app/views', __dir__) if prepend_paths
     end
     # Reuse the upstream viewer template, but serve our annotated derivative.
     def cad_preview_file_path(_attachment)
