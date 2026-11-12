@@ -113,12 +113,12 @@ module CosmosysArch
     def serve_annotated_file(attachment, yaml)
       cache = Rails.root.join('tmp', 'cosmosys_arch_glb')
       FileUtils.mkdir_p(cache)
-      key = Digest::SHA256.hexdigest("#{attachment.id}:#{attachment.digest}:v2")
+      key = Digest::SHA256.hexdigest("#{attachment.id}:#{attachment.digest}:#{yaml&.id}:#{yaml&.digest}:v3")
       path = cache.join("#{key}.glb")
       File.open(cache.join("#{key}.lock"), 'a') do |lock|
         lock.flock(File::LOCK_EX)
         unless File.exist?(path)
-          model = CosmosysArch::CadModel.new(glb_path: attachment.diskfile, yaml_path: yaml.diskfile, filename: attachment.filename)
+          model = CosmosysArch::CadModel.new(glb_path: attachment.diskfile, yaml_path: yaml&.diskfile, filename: attachment.filename)
           Tempfile.create(['annotated', '.glb'], cache) do |temporary|
             model.write_annotated(attachment.diskfile, temporary.path)
             File.rename(temporary.path, path)
@@ -143,8 +143,10 @@ module CosmosysArch
       raise CadModel::Invalid, 'Too many decisions' if raw.bytesize > 2.megabytes
       choices = raw.empty? ? {} : JSON.parse(raw)
       raise CadModel::Invalid, 'Decisions must be a mapping' unless choices.is_a?(Hash)
+      yaml = @issue.attachments.find_by(id: params[:yaml_id]) if params[:yaml_id].present?
+      raise CadModel::Invalid, 'Selected YAML attachment is unavailable' if params[:yaml_id].present? && !yaml
       @plan = CadImport.new(source: @issue, glb: @issue.attachments.find_by(id: params[:glb_id]),
-        yaml: @issue.attachments.find_by(id: params[:yaml_id]), choices: choices)
+        yaml: yaml, choices: choices)
     rescue JSON::ParserError => error
       raise CadModel::Invalid, error.message
     end

@@ -3,12 +3,12 @@ module CosmosysArch
   class CadImport
     attr_reader :source, :glb, :yaml, :model, :choices
 
-    def initialize(source:, glb:, yaml:, choices: {})
+    def initialize(source:, glb:, yaml: nil, choices: {})
       @source, @glb, @yaml = source, glb, yaml
       raise CadModel::Invalid, 'Use an architecture project' unless source.project.csys_project_profile == 'architecture'
-      raise CadModel::Invalid, 'Choose GLB and YAML attachments of the source item' unless [glb, yaml].all? { |file| file&.container == source }
-      raise CadModel::Invalid, 'Expected .glb and .yaml attachments' unless glb.filename.downcase.end_with?('.glb') && yaml.filename.downcase.end_with?('.yaml', '.yml')
-      @model = CadModel.new(glb_path: glb.diskfile, yaml_path: yaml.diskfile, filename: glb.filename)
+      raise CadModel::Invalid, 'Choose attachments of the source item' unless glb && [glb, yaml].compact.all? { |file| file.container == source }
+      raise CadModel::Invalid, 'Expected GLB and optional YAML attachments' unless glb.filename.downcase.end_with?('.glb') && (!yaml || yaml.filename.downcase.end_with?('.yaml', '.yml'))
+      @model = CadModel.new(glb_path: glb.diskfile, yaml_path: yaml&.diskfile, filename: glb.filename)
       defaults = Array(model.settings['disabled']).map { |path| model.resolve_node(path)['index'].to_s }
       @choices = model.nodes.to_h do |node|
         key = node['index'].to_s
@@ -49,7 +49,7 @@ module CosmosysArch
     end
 
     def digest
-      Digest::SHA256.hexdigest(JSON.generate([source.id, glb.id, glb.digest, yaml.id, yaml.digest, choices]))
+      Digest::SHA256.hexdigest(JSON.generate([source.id, glb.id, glb.digest, yaml&.id, yaml&.digest, choices]))
     end
 
     def call(user:, expected_digest:)
@@ -78,7 +78,8 @@ module CosmosysArch
             arch_default: control['default'], arch_step: control['step'])
         end
         source.reload.update!(arch_cad_data: JSON.generate('model' => model.payload.merge('choices' => choices),
-          'glb' => glb.filename, 'yaml' => yaml.filename, 'glb_digest' => glb.digest, 'yaml_digest' => yaml.digest))
+          'glb' => glb.filename, 'yaml' => yaml&.filename, 'glb_digest' => glb.digest, 'yaml_digest' => yaml&.digest,
+          'controls_source' => yaml ? 'yaml' : 'embedded'))
         items
       end
     end

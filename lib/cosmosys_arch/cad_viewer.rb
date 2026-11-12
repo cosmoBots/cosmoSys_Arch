@@ -52,7 +52,7 @@ module CosmosysArch
     end
     # Reuse the upstream viewer template, but serve our annotated derivative.
     def cad_preview_file_path(_attachment)
-      @plan ? arch_cad_preview_path(@issue, glb_id: @plan.glb.id, yaml_id: @plan.yaml.id) : arch_cad_file_path(@issue)
+      @plan ? arch_cad_preview_path(@issue, glb_id: @plan.glb.id, yaml_id: @plan.yaml&.id) : arch_cad_file_path(@issue)
     end
 
     def load_model
@@ -63,10 +63,10 @@ module CosmosysArch
       raise Unauthorized unless @source&.visible?(User.current)
       @spec = @source.cosmosys_arch_cad
       @attachment = @source.attachments.find_by(filename: @spec['glb'])
-      @yaml = @source.attachments.find_by(filename: @spec['yaml'])
+      @yaml = @source.attachments.find_by(filename: @spec['yaml']) if @spec['yaml'].present?
+      yaml_valid = @spec['yaml'].present? ? (@yaml&.visible?(User.current) && @yaml.digest == @spec['yaml_digest']) : @spec['controls_source'] == 'embedded'
       raise CadModel::Invalid, 'Source files missing or replaced; create a new import' unless
-        @attachment&.visible?(User.current) && @yaml&.visible?(User.current) &&
-        @attachment.digest == @spec['glb_digest'] && @yaml.digest == @spec['yaml_digest']
+        @attachment&.visible?(User.current) && yaml_valid && @attachment.digest == @spec['glb_digest']
     end
   end
 end

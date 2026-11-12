@@ -2,7 +2,7 @@ es:
   text_cosmosys_arch_report_capture_timeout: No se pudo preparar la figura a tiempo. Abre el visor de la pieza para volver a intentarlo.
   text_cosmosys_arch_report_capture_unsaved: La figura sólo está disponible en esta página. Un usuario con permisos de edición y guardado debe generar la captura para incluirla en las exportaciones.
   label_cosmosys_arch_reset_import: Restablecer importación CAD
-  text_cosmosys_arch_reset_explanation: Se eliminará únicamente la configuración de la importación anterior de este ítem. Se conservarán el ítem, su CSID, historial, adjuntos y vistas guardadas. Después podrás seleccionar de nuevo el GLB y el YAML. No se borran hijos ni otros elementos automáticamente.
+  text_cosmosys_arch_reset_explanation: Se eliminará únicamente la configuración de la importación anterior de este ítem. Se conservarán el ítem, su CSID, historial, adjuntos y vistas guardadas. Después podrás seleccionar de nuevo el GLB y, si es necesario, su YAML. No se borran hijos ni otros elementos automáticamente.
   text_cosmosys_arch_reset_confirm: Confirmo que quiero descartar la configuración de importación anterior.
   text_cosmosys_arch_reset_not_source: Este ítem no es el origen de una importación CAD que pueda restablecerse.
   text_cosmosys_arch_reset_has_items: Todavía hay hijos o elementos vinculados a este modelo. Debes resolverlos antes de restablecer la importación, aunque se hayan movido fuera de este subárbol.
@@ -38,9 +38,10 @@ es:
   label_cosmosys_arch_type_software: Software
   label_cosmosys_arch_dof: Grado de libertad
   text_cosmosys_arch_dof: Traslación o rotación rígida que controla un nodo de arquitectura.
-  label_cosmosys_arch_cad_import: Importar arquitectura desde GLB y YAML
+  label_cosmosys_arch_cad_import: Importar arquitectura desde GLB
+  label_cosmosys_arch_embedded_controls: Sin YAML — usar anotaciones del GLB
   label_cosmosys_arch_cad_model: Modelo CAD y controles
-  text_cosmosys_arch_cad_import: Adjunta a este ítem un GLB y su YAML y revisa la jerarquía. No se crea ningún ítem antes de confirmar.
+  text_cosmosys_arch_cad_import: Adjunta un GLB anotado o un GLB con su YAML y revisa la jerarquía. Si adjuntas ambos, sus controles deben coincidir. No se crea ningún ítem antes de confirmar.
   label_cosmosys_arch_review: Revisar importación
   label_cosmosys_arch_review_again: Repetir revisión
   label_cosmosys_arch_confirm: Confirmar importación

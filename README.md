@@ -1,6 +1,6 @@
 # cosmoSys Architecture
 
-Version **0.1.7** (experimental).
+Version **0.1.8-dirty** (experimental development).
 
 Imported architecture items show a static image of their CAD piece. Click it
 to open the interactive viewer. Sign in with permission to edit the item and
@@ -16,6 +16,14 @@ saved only if you can edit the item and save CAD views; otherwise they remain
 available on that page only. Exports wait for preparation to finish. Direct
 server exports cannot render missing CAD captures and show a viewer link.
 There is currently no per-item or report visibility setting.
+
+Default figures use deliberate lazy initialization: opening a piece or an HTML
+report prepares its default camera/PNG when no current capture exists. This
+lets you generate a report without manually selecting a default view for every
+piece first. Current saved figures are reused; missing or stale captures are
+prepared on demand. With the required edit/save permissions this initialization
+writes a shared view and PNG; without them the generated image stays on the page
+only. You can subsequently replace the shared default in the interactive viewer.
 
 Only camera and appearance are saved, not slider positions. Captures use the
 model's default positions without changing the temporary pose you are viewing.
@@ -80,7 +88,20 @@ presentation. A dedicated architecture ODS template with a visible/editable
 
 ## CAD architecture prototype
 
-Attach a GLB 2.0 and its YAML annotation to an item in an architecture project.
+Attach an annotated GLB 2.0 to an item in an architecture project. Choose
+**No YAML — use embedded GLB annotations** on the import screen. Unannotated
+GLBs still require a YAML attachment.
+
+Embedded controls use the `cosmosys.cad.controls` version 1 contract: a scene
+root carries `extras.cosmosys_model` with `schema`, `version` and
+`rotation_order: XYZ`; each controlled node carries a `cosmosys_controls`
+mapping. Controls specify their own node, motion, local/global space, axis,
+limits and step in glTF coordinates, degrees and metres. Default offsets are zero.
+Unknown versions, duplicate keys and foreign/missing targets are rejected.
+If YAML is supplied alongside embedded controls, both must agree. Conflicting
+controls, rotation order or additional pose overrides block preflight instead
+of silently choosing one source.
+
 The CAD import action opens a read-only preflight. Each node can be included,
 excluded with its entire subtree, or treated as an atomic component. An atomic
 subtree containing controls must be expanded before importing those controls.
@@ -92,7 +113,7 @@ always acts on its immediate structural parent; there is no independent target
 property. Creating or moving it under another architecture node updates its
 model binding automatically. A DoF cannot be a root or a child of an info item.
 Limits, default, axis, local/global space and step are native fields. Rotation
-uses degrees; translation uses metres. YAML rest/default is zero.
+uses degrees; translation uses metres. Import rest/default is zero.
 
 The node viewer isolates the selected subtree and offers its DoF sliders plus
 reset. Slider poses are temporary and do not change the original GLB or saved

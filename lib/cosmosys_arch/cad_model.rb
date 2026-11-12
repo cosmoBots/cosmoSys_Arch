@@ -10,7 +10,7 @@ module CosmosysArch
     MAX_JSON = 32 * 1024 * 1024
     attr_reader :nodes, :controls, :settings, :document, :json_size
 
-    def initialize(glb_path:, yaml_path:, filename:)
+    def initialize(glb_path:, yaml_path: nil, filename:)
       File.open(glb_path, 'rb') do |file|
         header = file.read(12)
         raise Invalid, 'Invalid GLB header' unless header&.bytesize == 12
@@ -20,20 +20,44 @@ module CosmosysArch
         chunk = file.read(8)
         raise Invalid, 'Missing GLB JSON' unless chunk&.bytesize == 8
         @json_size, type = chunk.unpack('V2')
-        raise Invalid, 'Invalid GLB JSON chunk' unless type == 0x4e4f534a && @json_size <= MAX_JSON
+        raise Invalid, 'Invalid GLB JSON chunk' unless type == 0x4e4f534a && @json_size <= MAX_JSON && @json_size <= total - 20
         @document = JSON.parse(file.read(@json_size))
       end
-      raise Invalid, 'Too many GLB nodes' if document.fetch('nodes', []).size > 20_000
-      raise Invalid, 'YAML exceeds 2 MiB' if File.size(yaml_path) > 2 * 1024 * 1024
-      yaml = YAML.safe_load_file(yaml_path, permitted_classes: [], permitted_symbols: [], aliases: false)
-      raise Invalid, 'Expected YAML models mapping' unless yaml.is_a?(Hash) && yaml['models'].is_a?(Hash)
-      @settings = yaml.fetch('models').fetch(filename)
+      raise Invalid, 'Expected GLB document and nodes' unless document.is_a?(Hash) && document['nodes'].is_a?(Array)
+      raise Invalid, 'Too many GLB nodes' if document.fetch('nodes').size > 20_000
+      build_nodes
+      embedded = embedded_settings
+      if yaml_path
+        raise Invalid, 'YAML exceeds 2 MiB' if File.size(yaml_path) > 2 * 1024 * 1024
+        yaml = YAML.safe_load_file(yaml_path, permitted_classes: [], permitted_symbols: [], aliases: false)
+        raise Invalid, 'Expected YAML models mapping' unless yaml.is_a?(Hash) && yaml['models'].is_a?(Hash)
+        @settings = yaml.fetch('models').fetch(filename)
+      else
+        @settings = embedded
+        raise Invalid, 'GLB has no embedded controls contract; choose a YAML attachment' unless settings
+      end
       raise Invalid, 'Model settings must be a mapping' unless settings.is_a?(Hash)
       @rotation_order = settings.fetch('rotation_order', 'XYZ')
       validate_rotation_order(@rotation_order)
-      build_nodes
-      raise Invalid, 'Controls must be a mapping' unless settings.fetch('controls', {}).is_a?(Hash)
-      @controls = settings.fetch('controls', {}).map do |key, value|
+      @controls = normalized_controls(settings.fetch('controls', {}))
+      transform = settings.fetch('transform', settings)
+      @model_transform = normalized_transform(transform)
+      raise Invalid, 'Node transforms must be a mapping' unless settings.fetch('node_transforms', {}).is_a?(Hash)
+      @overrides = settings.fetch('node_transforms', {}).to_h do |path, transform|
+        [resolve_node(path).fetch('index').to_s, normalized_transform(transform)]
+      end
+      if embedded && yaml_path
+        same_controls = controls.sort_by { |control| control['key'] } == normalized_controls(embedded.fetch('controls')).sort_by { |control| control['key'] }
+        raise Invalid, 'GLB annotations and YAML disagree; use matching files' unless same_controls && @rotation_order == embedded['rotation_order']
+        raise Invalid, 'GLB annotations cannot be combined with YAML pose overrides' unless (@model_transform.keys - ['rotation_order']).empty? && @overrides.empty?
+      end
+    rescue KeyError, TypeError, ArgumentError, JSON::ParserError, Psych::Exception => error
+      raise Invalid, error.message
+    end
+
+    def normalized_controls(mapping)
+      raise Invalid, 'Controls must be a mapping' unless mapping.is_a?(Hash)
+      mapping.map do |key, value|
         raise Invalid, 'Control must be a mapping' unless value.is_a?(Hash)
         target = resolve_node(value.fetch('target_node'))
         motion = value.fetch('transform', 'position')
@@ -45,15 +69,8 @@ module CosmosysArch
         { 'key' => key.to_s, 'node' => target.fetch('index'), 'motion' => motion, 'space' => space,
           'axis' => axis, 'min' => min, 'max' => max, 'default' => 0.0, 'step' => step }
       end
-      transform = settings.fetch('transform', settings)
-      @model_transform = normalized_transform(transform)
-      raise Invalid, 'Node transforms must be a mapping' unless settings.fetch('node_transforms', {}).is_a?(Hash)
-      @overrides = settings.fetch('node_transforms', {}).to_h do |path, transform|
-        [resolve_node(path).fetch('index').to_s, normalized_transform(transform)]
-      end
-    rescue KeyError, TypeError, ArgumentError, JSON::ParserError, Psych::Exception => error
-      raise Invalid, error.message
     end
+    private :normalized_controls
 
     def payload
       { 'nodes' => nodes, 'controls' => controls, 'rotation_order' => @rotation_order, 'transform' => @model_transform,
@@ -84,6 +101,36 @@ module CosmosysArch
     end
 
     private
+
+    def embedded_settings
+      schemas, mapping = [], {}
+      reachable = nodes.to_h { |node| [node['index'], node] }
+      document.fetch('nodes').each_with_index do |raw, index|
+        extras = raw.is_a?(Hash) && raw['extras'].is_a?(Hash) ? raw['extras'] : {}
+        next unless extras.key?('cosmosys_model') || extras.key?('cosmosys_controls')
+        owner = reachable[index]
+        raise Invalid, 'Embedded annotation outside the active scene' unless owner
+        if extras.key?('cosmosys_model')
+          schema = extras['cosmosys_model']
+          raise Invalid, 'Embedded model contract must be on a scene root' unless owner['parent'].nil?
+          raise Invalid, 'Unsupported embedded controls contract' unless schema.is_a?(Hash) && schema['schema'] == 'cosmosys.cad.controls' && schema['version'] == 1 && schema['rotation_order'] == 'XYZ'
+          schemas << schema
+        end
+        annotations = extras.fetch('cosmosys_controls', {})
+        raise Invalid, 'Embedded controls must be a mapping' unless annotations.is_a?(Hash)
+        annotations.each do |key, value|
+          raise Invalid, 'Empty or duplicate embedded control key' unless key.is_a?(String) && !key.strip.empty? && !mapping.key?(key)
+          required = %w[target_node transform space axis min max step]
+          raise Invalid, "Incomplete embedded control #{key}" unless value.is_a?(Hash) && required.all? { |field| value.key?(field) }
+          raise Invalid, "Invalid embedded control #{key}" unless value['target_node'].is_a?(String) && !value['target_node'].empty? && %w[min max step].all? { |field| value[field].is_a?(Numeric) && value[field].finite? }
+          raise Invalid, "Embedded control #{key} targets another node" unless resolve_node(value['target_node'])['index'] == index
+          mapping[key] = value
+        end
+      end
+      return nil if schemas.empty? && mapping.empty?
+      raise Invalid, 'Expected exactly one embedded model contract' unless schemas.one?
+      { 'rotation_order' => schemas.first['rotation_order'], 'controls' => mapping }
+    end
 
     def normalized_transform(value)
       raise Invalid, 'Transform must be a mapping' unless value.is_a?(Hash)

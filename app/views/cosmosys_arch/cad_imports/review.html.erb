@@ -4,7 +4,7 @@
 <p><strong><%= @retained.size %></strong> / <%= @plan.model.nodes.size %> <%= l(:label_cosmosys_arch_nodes) %>;
 <strong><%= @controls.size %></strong> <%= l(:label_cosmosys_arch_dofs) %>.</p>
 <%= form_tag arch_cad_create_path(@issue), id: 'arch-cad-plan' do %>
-  <%= hidden_field_tag :glb_id, @plan.glb.id %><%= hidden_field_tag :yaml_id, @plan.yaml.id %>
+  <%= hidden_field_tag :glb_id, @plan.glb.id %><%= hidden_field_tag :yaml_id, @plan.yaml&.id %>
   <%= hidden_field_tag :plan_digest, @plan.digest %><%= hidden_field_tag :choices_json, JSON.generate(@plan.choices.transform_values { |v| v.merge('visible' => v['visible'] ? '1' : '0') }) %>
   <div class="arch-preflight-layout" id="arch-cad-preflight" data-blocked="<%= @review_error.present? %>">
     <section class="arch-preflight-tree" aria-label="<%= l(:label_cosmosys_arch_nodes) %>">

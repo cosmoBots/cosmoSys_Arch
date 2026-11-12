@@ -2,6 +2,6 @@
 <p><%= l(:text_cosmosys_arch_cad_import) %></p>
 <%= form_tag arch_cad_review_path(@issue) do %>
   <p><%= label_tag :glb_id, 'GLB' %> <%= select_tag :glb_id, options_from_collection_for_select(@attachments.select { |a| a.filename.downcase.end_with?('.glb') }, :id, :filename), required: true %></p>
-  <p><%= label_tag :yaml_id, 'YAML' %> <%= select_tag :yaml_id, options_from_collection_for_select(@attachments.select { |a| a.filename.downcase.end_with?('.yaml', '.yml') }, :id, :filename), required: true %></p>
+  <p><%= label_tag :yaml_id, 'YAML' %> <%= select_tag :yaml_id, options_from_collection_for_select(@attachments.select { |a| a.filename.downcase.end_with?('.yaml', '.yml') }, :id, :filename), include_blank: l(:label_cosmosys_arch_embedded_controls) %></p>
   <%= submit_tag l(:label_cosmosys_arch_review) %>
 <% end %>

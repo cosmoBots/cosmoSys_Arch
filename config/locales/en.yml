@@ -2,7 +2,7 @@ en:
   text_cosmosys_arch_report_capture_timeout: The figure could not be prepared in time. Open the piece viewer to try again.
   text_cosmosys_arch_report_capture_unsaved: The figure is only available on this page. A user with edit and view-saving permissions must generate the capture to include it in exported reports.
   label_cosmosys_arch_reset_import: Reset CAD import
-  text_cosmosys_arch_reset_explanation: Only this item's previous import configuration will be cleared. The item, CSID, history, attachments and saved views are preserved. You can then select the GLB and YAML again. Children and other items are never deleted automatically.
+  text_cosmosys_arch_reset_explanation: Only this item's previous import configuration will be cleared. The item, CSID, history, attachments and saved views are preserved. You can then select the GLB and, if needed, its YAML again. Children and other items are never deleted automatically.
   text_cosmosys_arch_reset_confirm: I confirm that I want to discard the previous import configuration.
   text_cosmosys_arch_reset_not_source: This item is not the source of a CAD import that can be reset.
   text_cosmosys_arch_reset_has_items: Children or items linked to this model still exist. Resolve them before resetting the import, even if they have moved outside this subtree.
@@ -38,9 +38,10 @@ en:
   label_cosmosys_arch_type_software: Software
   label_cosmosys_arch_dof: Degree of freedom
   text_cosmosys_arch_dof: A rigid translation or rotation controlling an architecture node.
-  label_cosmosys_arch_cad_import: Import architecture from GLB and YAML
+  label_cosmosys_arch_cad_import: Import architecture from GLB
+  label_cosmosys_arch_embedded_controls: No YAML — use embedded GLB annotations
   label_cosmosys_arch_cad_model: CAD model and controls
-  text_cosmosys_arch_cad_import: Attach a GLB model and its YAML to this item, then review the hierarchy. No items are created before confirmation.
+  text_cosmosys_arch_cad_import: Attach an annotated GLB or a GLB with its YAML, then review the hierarchy. If both are supplied, their controls must agree. No items are created before confirmation.
   label_cosmosys_arch_review: Review import
   label_cosmosys_arch_review_again: Repeat review
   label_cosmosys_arch_confirm: Confirm import
