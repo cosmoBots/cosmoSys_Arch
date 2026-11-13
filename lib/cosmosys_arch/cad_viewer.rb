@@ -19,7 +19,7 @@ module CosmosysArch
         raise CadModel::Invalid, 'The architecture item has no valid CAD node reference'
       end
       @cad_navigation = CadNavigation.build(nodes: nodes,
-        items: @node_items.select(&:cosmosys_arch_node?), selected: selected)
+        items: @node_items.select(&:cosmosys_arch_node?), selected: selected, source: @source)
       subtree = {}
       nodes.each { |node| subtree[node['index']] = true if selected.nil? || node['index'].to_s == selected || subtree[node['parent']] }
       target_items = @node_items.select { |item| item.cosmosys_arch_node? && subtree[item.arch_node_key.to_i] }

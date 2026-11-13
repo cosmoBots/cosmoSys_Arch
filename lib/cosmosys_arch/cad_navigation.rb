@@ -2,7 +2,7 @@ module CosmosysArch
   # CAD parentage/order, not the independently editable Redmine item hierarchy.
   # Receives only authorized items; missing ancestors are never named or linked.
   class CadNavigation
-    def self.build(nodes:, items:, selected:)
+    def self.build(nodes:, items:, selected:, source: nil)
       by_index = nodes.to_h { |node| [node.fetch('index').to_s, node] }
       by_key = items.to_h { |item| [item.arch_node_key.to_s, item] }
       branches = nodes.filter_map do |node|
@@ -22,10 +22,15 @@ module CosmosysArch
         path
       end
       ancestors.call(selected.to_s).each { |key| branches[key][:open] = true if branches[key] }
-      branches.each_with_object([]) do |(key, branch), roots|
+      roots = branches.each_with_object([]) do |(key, branch), roots|
         parent = ancestors.call(key).find { |ancestor| branches.key?(ancestor) }
         (parent ? branches.fetch(parent)[:children] : roots) << branch
       end
+      # The source item is the whole GLB, even with several scene roots or
+      # no imported item for its structural container. No synthetic PBS item.
+      return roots unless source && items.none? { |item| item == source }
+
+      [{ item: source, children: roots, current: selected.nil?, open: !selected.nil? }]
     end
   end
 end
