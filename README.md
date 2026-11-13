@@ -124,7 +124,7 @@ Limits, default, axis, local/global space and step are native fields. Rotation
 uses degrees; translation uses metres. Import rest/default is zero.
 
 The CAD viewer keeps its control column compact. Each DoF has an editable
-numeric field; focusing it opens a floating slider. Keyboard entry accepts
+numeric field and a short, permanently visible slider. Keyboard entry accepts
 exact values within the range. The slider follows the declared step and always
 reaches both exact bounds, even when the last increment is shorter. Spinner
 increments may be finer to accommodate fractional bounds. Leaving an out-of-range
