@@ -7,6 +7,14 @@ to open the interactive viewer. Sign in with permission to edit the item and
 save CAD attachment views to save a shared default camera or named views.
 The default camera is shared by all users; it is not a personal preference.
 
+The viewer's **Nodes** section follows the CAD hierarchy and order. Expand
+branches to navigate; the current node is highlighted, with only its ancestor
+path expanded initially. Reorganizing PBS items does not change this CAD tree.
+
+Architecture/PBS projects default to `fdp` for combined diagrams and to
+hierarchy diagrams in reports. Saved project diagram/report selections take
+precedence; change them in the project's cosmoSys settings if required.
+
 Reports automatically include that piece's default PNG after the description,
 before fields and metadata, without adding a macro. The same image is used in
 HTML, ODT, DOCX and PDF. Automatic report figures are at most 450 px high
@@ -50,7 +58,7 @@ traceability is deferred.
 ## Requirements
 
 - Redmine 7.0.1
-- [cosmoSys](https://github.com/cosmoBots/cosmoSys) 0.2.10 or later
+- [cosmoSys](https://github.com/cosmoBots/cosmoSys) 0.2.11-dirty or later
 - [cosmoSys Requirements](https://github.com/cosmoBots/cosmoSys_Req) 0.3.6 or later
 - [cosmoSys CAD Preview](https://github.com/cosmoBots/cosmoSys_cad_preview) 0.1.8 or later
 

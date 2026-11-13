@@ -1,3 +1,5 @@
+require_dependency File.expand_path('cad_navigation', __dir__)
+
 module CosmosysArch
   # Shared preparation for standalone and integrated CAD viewers. Both paths
   # enforce source/attachment visibility before rendering the same partial.
@@ -16,6 +18,8 @@ module CosmosysArch
       if @issue.cosmosys_arch_node? && (selected.nil? || nodes.none? { |node| node['index'].to_s == selected })
         raise CadModel::Invalid, 'The architecture item has no valid CAD node reference'
       end
+      @cad_navigation = CadNavigation.build(nodes: nodes,
+        items: @node_items.select(&:cosmosys_arch_node?), selected: selected)
       subtree = {}
       nodes.each { |node| subtree[node['index']] = true if selected.nil? || node['index'].to_s == selected || subtree[node['parent']] }
       target_items = @node_items.select { |item| item.cosmosys_arch_node? && subtree[item.arch_node_key.to_i] }

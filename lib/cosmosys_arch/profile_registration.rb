@@ -67,6 +67,9 @@ module CosmosysArch
         default_root_tracker: 'cs_info',
         default_report_columns: %w[tracker status arch_type],
         default_report_field_presentations: { 'arch_type' => 'metadata' }.freeze,
+        default_report_options: { 'preferred_diagram' => false, 'combined_diagram' => false,
+          'hierarchy_diagram' => true, 'dependency_diagram' => false }.freeze,
+        combined_diagram_layout_mode: 'fdp',
         default_item_list_columns: %w[chapter_label subject tracker status arch_type priority]
       )
     end

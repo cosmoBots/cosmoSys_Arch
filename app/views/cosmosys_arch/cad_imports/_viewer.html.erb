@@ -13,11 +13,9 @@
     <button type="button" data-arch-reset disabled><%= l(:label_cosmosys_arch_reset_pose) %></button>
     <p role="status"><%= l(:label_loading) %></p>
     <h3><%= l(:label_cosmosys_arch_nodes) %></h3>
-    <ul style="max-height:45vh;overflow:auto">
-      <% @node_items.select(&:cosmosys_arch_node?).each do |item| %>
-        <li><%= link_to item.subject, arch_cad_view_path(item) %></li>
-      <% end %>
-    </ul>
+    <nav class="arch-cad-node-tree" aria-label="<%= l(:label_cosmosys_arch_nodes) %>">
+      <%= render partial: 'cosmosys_arch/cad_imports/node_tree', locals: {nodes: @cad_navigation} %>
+    </nav>
   </div>
   <div style="min-width:0"><%= render partial: 'cosmosys_cad_preview/temporary_viewer', locals: {presentation_only: local_assigns[:presentation_only]} %></div>
 </div>
@@ -29,4 +27,13 @@
     initializeArchitectureControls(ModelControls, document.getElementById(<%= raw((@architecture_inline_issue ? "architecture-cad-item-#{@architecture_inline_issue.id}" : '').to_json) %>) || document);
   </script>
   <style>.cosmosys-arch-viewer .cad-preview-canvas { height:65vh;min-height:400px } .cosmosys-arch-viewer [data-arch-control] { width:80% } .cosmosys-arch-viewer .cad-preview-toolbar-group:has([data-cad-view]) { display:none }</style>
+  <style>
+    .arch-cad-node-tree { max-height:45vh;overflow:auto }
+    .arch-cad-node-tree ul { list-style:none;margin:0;padding-left:1.1em }
+    .arch-cad-node-tree > ul { padding-left:0 }
+    .arch-cad-node-tree summary { cursor:pointer }
+    .arch-cad-node-tree li { margin:0.25em 0;overflow-wrap:anywhere }
+    .arch-cad-node-leaf { display:block;padding-left:1.1em }
+    .arch-cad-current-node { font-weight:bold;background:var(--cosmosys-selected-bg,#e6efff);border-radius:2px }
+  </style>
 <% end %>

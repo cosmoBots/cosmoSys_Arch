@@ -1,0 +1,18 @@
+<ul>
+  <% nodes.each do |node| %>
+    <li>
+      <% item = node.fetch(:item) %>
+      <% label = link_to item.subject, arch_cad_view_path(item),
+           class: ('arch-cad-current-node' if node[:current]),
+           aria: {current: ('page' if node[:current])}, title: "#{item.csid}: #{item.subject}" %>
+      <% if node[:children].any? %>
+        <details <%= 'open' if node[:open] %>>
+          <summary><%= label %></summary>
+          <%= render partial: 'cosmosys_arch/cad_imports/node_tree', locals: {nodes: node[:children]} %>
+        </details>
+      <% else %>
+        <span class="arch-cad-node-leaf"><%= label %></span>
+      <% end %>
+    </li>
+  <% end %>
+</ul>

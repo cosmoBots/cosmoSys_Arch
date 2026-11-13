@@ -9,7 +9,7 @@ Redmine::Plugin.register :cosmosys_arch do
   url 'https://cosmobots.eu'
   author_url 'https://cosmobots.eu'
 
-  requires_redmine_plugin :cosmosys, version_or_higher: '0.2.10'
+  requires_redmine_plugin :cosmosys, version_or_higher: '0.2.11-dirty'
   requires_redmine_plugin :cosmosys_cad_preview, version_or_higher: '0.1.8'
   requires_redmine_plugin :cosmosys_req, version_or_higher: '0.3.6'
 end
