@@ -123,6 +123,14 @@ model binding automatically. A DoF cannot be a root or a child of an info item.
 Limits, default, axis, local/global space and step are native fields. Rotation
 uses degrees; translation uses metres. Import rest/default is zero.
 
+The CAD viewer keeps its control column compact. Each DoF has an editable
+numeric field; focusing it opens a floating slider. Keyboard entry accepts
+exact values within the range. The slider follows the declared step and always
+reaches both exact bounds, even when the last increment is shorter. Spinner
+increments may be finer to accommodate fractional bounds. Leaving an out-of-range
+numeric field clamps it to the nearest bound; an empty field restores its last
+valid value. These are temporary poses, not changes to saved model defaults.
+
 The node viewer isolates the selected subtree and offers its DoF sliders plus
 reset. Slider poses are temporary and do not change the original GLB or saved
 camera. Keep the imported model unchanged: updating an existing import to a new

@@ -2,13 +2,16 @@
   <p class="info"><%= l(:text_cosmosys_arch_pose_temporary) %></p>
 <% end %>
 <%= render partial: 'cosmosys_arch/cad_imports/piece_camera', locals: {readonly: local_assigns[:poris_simulation]} %>
-<div class="cosmosys-arch-viewer" <% unless local_assigns[:presentation_only] %>style="display:grid;grid-template-columns:minmax(240px,30%) minmax(0,1fr);gap:1em"<% end %>>
+<div class="cosmosys-arch-viewer <%= 'arch-cad-with-controls' unless local_assigns[:presentation_only] %>">
   <div id="arch-cad-controls" <%= 'hidden' if local_assigns[:presentation_only] %> data-ready-label="<%= l(:label_cosmosys_arch_controls_ready) %>">
     <h3><%= l(:label_cosmosys_arch_dofs) %></h3>
     <% @dofs.each do |item| %>
-      <p><%= link_to item.subject, issue_path(item) %> (<%= item.arch_axis %>, <%= item.arch_space %>, <%= item.arch_motion == 'rotation' ? '°' : 'm' %>)<br>
-      <input type="range" aria-label="<%= item.subject %>" data-arch-control="<%= item.csid %>" data-default="<%= item.arch_default %>" min="<%= item.arch_min %>" max="<%= item.arch_max %>" step="<%= item.arch_step %>" value="<%= item.arch_default %>" disabled>
-      <output><%= item.arch_default %></output></p>
+      <div class="arch-cad-control-row">
+        <div><%= link_to item.subject, issue_path(item) %>
+          <small>(<%= item.arch_axis %>, <%= item.arch_space %>, <%= item.arch_motion == 'rotation' ? '°' : 'm' %>)</small>
+        </div>
+        <input type="number" aria-label="<%= item.subject %>" data-arch-control="<%= item.csid %>" data-default="<%= item.arch_default %>" min="<%= item.arch_min %>" max="<%= item.arch_max %>" step="<%= item.arch_step %>" value="<%= item.arch_default %>" disabled>
+      </div>
     <% end %>
     <button type="button" data-arch-reset disabled><%= l(:label_cosmosys_arch_reset_pose) %></button>
     <p role="status"><%= l(:label_loading) %></p>
@@ -26,8 +29,18 @@
     import {initializeArchitectureControls} from <%= raw(asset_path('plugin_assets/cosmosys_arch/cad_architecture.js').to_json) %>;
     initializeArchitectureControls(ModelControls, document.getElementById(<%= raw((@architecture_inline_issue ? "architecture-cad-item-#{@architecture_inline_issue.id}" : '').to_json) %>) || document);
   </script>
-  <style>.cosmosys-arch-viewer .cad-preview-canvas { height:65vh;min-height:400px } .cosmosys-arch-viewer [data-arch-control] { width:80% } .cosmosys-arch-viewer .cad-preview-toolbar-group:has([data-cad-view]) { display:none }</style>
+  <style>.cosmosys-arch-viewer .cad-preview-canvas { height:65vh;min-height:400px } .cosmosys-arch-viewer .cad-preview-toolbar-group:has([data-cad-view]) { display:none }</style>
   <style>
+    .arch-cad-with-controls { display:grid;grid-template-columns:minmax(0,14rem) minmax(0,1fr);gap:1em }
+    #arch-cad-controls { min-width:0;overflow-wrap:anywhere }
+    #arch-cad-controls [data-arch-reset] { max-width:100%;white-space:normal }
+    .arch-cad-control-row { display:grid;grid-template-columns:minmax(0,1fr) 7em;align-items:center;gap:.5em;margin:.6em 0 }
+    .arch-cad-control-row small { display:block;color:#666 }
+    .arch-cad-control-row [data-arch-control] { width:100%;min-width:0;box-sizing:border-box;text-align:right }
+    .arch-cad-range-popup { position:fixed;z-index:10000;box-sizing:border-box;padding:10px 12px 6px;border:1px solid #aab5c0;border-radius:5px;background:#fff;color:#333;box-shadow:0 3px 12px #0003 }
+    .arch-cad-range-popup input { display:block;width:100%;margin:0 }
+    .arch-cad-range-limits { display:flex;justify-content:space-between;font:11px/1.5 sans-serif }
+    @media (max-width:760px) { .arch-cad-with-controls { grid-template-columns:minmax(0,1fr) } }
     .arch-cad-node-tree { max-height:45vh;overflow:auto }
     .arch-cad-node-tree ul { list-style:none;margin:0;padding-left:1.1em }
     .arch-cad-node-tree > ul { padding-left:0 }
