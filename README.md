@@ -15,6 +15,8 @@ The viewer's **Nodes** section follows the CAD hierarchy and order. Expand
 branches to navigate; the current node is highlighted, with only its ancestor
 path expanded initially. Reorganizing PBS items does not change this CAD tree.
 
+Motion controls display permanent sliders alongside editable numeric values.
+
 Architecture/PBS projects default to `fdp` for combined diagrams and to
 hierarchy diagrams in reports. Saved project diagram/report selections take
 precedence; change them in the project's cosmoSys settings if required.
