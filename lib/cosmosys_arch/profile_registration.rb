@@ -65,6 +65,7 @@ module CosmosysArch
           { key: 'arch_dof', name: 'archDoF', item_profile: 'arch_dof' }.freeze
         ].freeze,
         default_root_tracker: 'cs_info',
+        default_disabled_modules: %w[calendar time_tracking news boards gantt files].freeze,
         default_report_columns: %w[tracker status arch_type],
         default_report_field_presentations: { 'arch_type' => 'metadata' }.freeze,
         default_report_options: { 'preferred_diagram' => false, 'combined_diagram' => false,

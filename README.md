@@ -1,6 +1,10 @@
 # cosmoSys Architecture
 
-Version **0.1.8** (experimental).
+Version **0.1.9-dirty** (experimental development).
+
+New Architecture/PBS projects default to time tracking, calendars, news,
+forums, Gantt and files being disabled. They can be enabled explicitly;
+existing projects retain their module choices.
 
 Imported architecture items show a static image of their CAD piece. Click it
 to open the interactive viewer. Sign in with permission to edit the item and
