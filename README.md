@@ -1,6 +1,10 @@
 # cosmoSys Architecture
 
-Version **0.1.8-dirty** (experimental development).
+Version **0.1.9-dirty** (experimental development).
+
+New Architecture/PBS projects default to time tracking, calendars, news,
+forums, Gantt and files being disabled. They can be enabled explicitly;
+existing projects retain their module choices.
 
 Imported architecture items show a static image of their CAD piece. Click it
 to open the interactive viewer. Sign in with permission to edit the item and
@@ -58,7 +62,7 @@ traceability is deferred.
 ## Requirements
 
 - Redmine 7.0.1
-- [cosmoSys](https://github.com/cosmoBots/cosmoSys) 0.2.11-dirty or later
+- [cosmoSys](https://github.com/cosmoBots/cosmoSys) 0.2.11 or later
 - [cosmoSys Requirements](https://github.com/cosmoBots/cosmoSys_Req) 0.3.6 or later
 - [cosmoSys CAD Preview](https://github.com/cosmoBots/cosmoSys_cad_preview) 0.1.8 or later
 
@@ -124,7 +128,7 @@ Limits, default, axis, local/global space and step are native fields. Rotation
 uses degrees; translation uses metres. Import rest/default is zero.
 
 The CAD viewer keeps its control column compact. Each DoF has an editable
-numeric field; focusing it opens a floating slider. Keyboard entry accepts
+numeric field and a short, permanently visible slider. Keyboard entry accepts
 exact values within the range. The slider follows the declared step and always
 reaches both exact bounds, even when the last increment is shorter. Spinner
 increments may be finer to accommodate fractional bounds. Leaving an out-of-range

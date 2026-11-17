@@ -11,6 +11,7 @@
           <small>(<%= item.arch_axis %>, <%= item.arch_space %>, <%= item.arch_motion == 'rotation' ? '°' : 'm' %>)</small>
         </div>
         <input type="number" aria-label="<%= item.subject %>" data-arch-control="<%= item.csid %>" data-default="<%= item.arch_default %>" min="<%= item.arch_min %>" max="<%= item.arch_max %>" step="<%= item.arch_step %>" value="<%= item.arch_default %>" disabled>
+        <input type="range" class="arch-cad-slider" data-arch-slider="<%= item.csid %>" aria-label="<%= item.subject %>" disabled>
       </div>
     <% end %>
     <button type="button" data-arch-reset disabled><%= l(:label_cosmosys_arch_reset_pose) %></button>
@@ -37,9 +38,7 @@
     .arch-cad-control-row { display:grid;grid-template-columns:minmax(0,1fr) 7em;align-items:center;gap:.5em;margin:.6em 0 }
     .arch-cad-control-row small { display:block;color:#666 }
     .arch-cad-control-row [data-arch-control] { width:100%;min-width:0;box-sizing:border-box;text-align:right }
-    .arch-cad-range-popup { position:fixed;z-index:10000;box-sizing:border-box;padding:10px 12px 6px;border:1px solid #aab5c0;border-radius:5px;background:#fff;color:#333;box-shadow:0 3px 12px #0003 }
-    .arch-cad-range-popup input { display:block;width:100%;margin:0 }
-    .arch-cad-range-limits { display:flex;justify-content:space-between;font:11px/1.5 sans-serif }
+    .arch-cad-control-row .arch-cad-slider { grid-column:1 / -1;width:100%;min-width:0;height:1.25em;margin:0;box-sizing:border-box }
     @media (max-width:760px) { .arch-cad-with-controls { grid-template-columns:minmax(0,1fr) } }
     .arch-cad-node-tree { max-height:45vh;overflow:auto }
     .arch-cad-node-tree ul { list-style:none;margin:0;padding-left:1.1em }

@@ -19,94 +19,32 @@ function numericStep(min, max, step) {
   return Number(a.toPrecision(14));
 }
 
-function floatingRanges(inputs, getValue, setValue) {
-  const popup = document.createElement('div');
-  popup.className = 'arch-cad-range-popup';
-  const slider = document.createElement('input');
-  slider.type = 'range';
-  const limits = document.createElement('div');
-  limits.className = 'arch-cad-range-limits';
-  limits.setAttribute('aria-hidden', 'true');
-  const low = document.createElement('span'), high = document.createElement('span');
-  limits.append(low, high);
-  popup.append(slider, limits);
-  let active;
-  const definitions = new Map(inputs.map(input => {
+function permanentRanges(inputs, getValue, setValue) {
+  const definitions = inputs.map(input => {
     const min = Number(input.min), max = Number(input.max), step = Number(input.step);
     if (![min,max,step].every(Number.isFinite) || step <= 0 || max < min) throw new Error('Invalid CAD control range');
+    const slider = input.parentElement.querySelector('[data-arch-slider]');
+    if (!slider) throw new Error('Missing CAD control slider');
     input.dataset.archStep = String(step);
     input.step = String(numericStep(min, max, step));
-    return [input, {min, max, step}];
-  }));
-  const position = () => {
-    if (!active) return;
-    if (!active.isConnected) { close(); return; }
-    const rect = active.getBoundingClientRect();
-    const width = Math.min(240, Math.max(0, window.innerWidth - 16));
-    popup.style.width = `${width}px`;
-    popup.style.left = `${Math.max(8, Math.min(rect.left, window.innerWidth - width - 8))}px`;
-    popup.style.top = `${rect.bottom + popup.offsetHeight + 6 <= window.innerHeight ? rect.bottom + 6 : Math.max(8, rect.top - popup.offsetHeight - 6)}px`;
-  };
-  const sync = () => {
-    if (!active) return;
-    const {min,max,step} = definitions.get(active);
-    const value = getValue(active);
-    slider.value = String(value >= max ? rangeSteps(min,max,step) : Math.round((value-min)/step));
-    slider.setAttribute('aria-valuetext', String(value));
-  };
-  const contains = target => target && (target === active || popup.contains(target));
-  const outside = event => { if (!contains(event.target)) close(); };
-  function close() {
-    active?.setAttribute('aria-expanded', 'false');
-    active = null;
-    popup.remove();
-    window.removeEventListener('resize', position);
-    window.removeEventListener('scroll', position, true);
-    document.removeEventListener('pointerdown', outside, true);
-  }
-  const show = input => {
-    close();
-    const {min,max,step} = definitions.get(input);
-    if (min === max) return;
-    active = input;
-    input.setAttribute('aria-expanded', 'true');
     slider.min = '0'; slider.max = String(rangeSteps(min,max,step)); slider.step = '1';
-    slider.setAttribute('aria-label', input.getAttribute('aria-label'));
-    low.textContent = String(min); high.textContent = String(max);
-    document.body.append(popup);
-    sync(); position();
-    window.addEventListener('resize', position);
-    window.addEventListener('scroll', position, true);
-    document.addEventListener('pointerdown', outside, true);
-  };
-  slider.addEventListener('input', () => {
-    const {min,max,step} = definitions.get(active);
-    setValue(active, rangeValue(Number(slider.value), min,max,step));
-    sync();
-  });
-  popup.addEventListener('focusout', event => { if (!contains(event.relatedTarget)) close(); });
-  popup.addEventListener('keydown', event => {
-    if (event.key === 'Escape') {
-      event.preventDefault(); event.stopPropagation();
-      const input = active;
-      input?.focus(); close();
-    }
-  });
-  inputs.forEach(input => {
-    input.setAttribute('aria-expanded', 'false');
-    input.addEventListener('focus', () => show(input));
-    input.addEventListener('click', () => { if (active !== input) show(input); });
-    input.addEventListener('blur', event => {
-      const {min,max} = definitions.get(input);
+    slider.disabled = min === max;
+    slider.addEventListener('input', () => {
+      setValue(input, rangeValue(Number(slider.value), min,max,step));
+    });
+    input.addEventListener('blur', () => {
       const numeric = input.value === '' ? NaN : Number(input.value);
       setValue(input, Number.isFinite(numeric) ? Math.min(max,Math.max(min,numeric)) : getValue(input));
-      if (!contains(event.relatedTarget)) close();
     });
-    input.addEventListener('keydown', event => {
-      if (event.key === 'Escape') { event.stopPropagation(); close(); }
-    });
+    return {input, slider, min, max, step};
   });
-  return sync;
+  return () => {
+    definitions.forEach(({input,slider,min,max,step}) => {
+      const value = getValue(input);
+      slider.value = String(value >= max ? rangeSteps(min,max,step) : Math.round((value-min)/step));
+      slider.setAttribute('aria-valuetext', String(value));
+    });
+  };
 }
 
 export function initializeArchitectureControls(ModelControls, root = document) {
@@ -140,7 +78,7 @@ const initialize = viewer => {
         apply();
       });
     });
-    syncRange = floatingRanges(inputs, input => values[input.dataset.archControl], (input,value) => {
+    syncRange = permanentRanges(inputs, input => values[input.dataset.archControl], (input,value) => {
       values[input.dataset.archControl] = value; apply();
     });
     const reset = panel.querySelector('[data-arch-reset]');
