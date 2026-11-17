@@ -1,6 +1,6 @@
 # cosmoSys Architecture
 
-Version **0.1.9-dirty** (experimental development).
+Version **0.1.9** (experimental).
 
 New Architecture/PBS projects default to time tracking, calendars, news,
 forums, Gantt and files being disabled. They can be enabled explicitly;
@@ -65,7 +65,7 @@ traceability is deferred.
 
 - Redmine 7.0.1
 - [cosmoSys](https://github.com/cosmoBots/cosmoSys) 0.2.11 or later
-- [cosmoSys Requirements](https://github.com/cosmoBots/cosmoSys_Req) 0.3.6 or later
+- [cosmoSys Requirements](https://github.com/cosmoBots/cosmoSys_Req) 0.3.7 or later
 - [cosmoSys CAD Preview](https://github.com/cosmoBots/cosmoSys_cad_preview) 0.1.8 or later
 
 Architecture projects use the base cosmoSys trackers plus `archNode` and
