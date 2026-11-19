@@ -1,6 +1,6 @@
 # cosmoSys Architecture
 
-Version **0.1.9** (experimental).
+Version **0.1.10-dirty** (experimental).
 
 New Architecture/PBS projects default to time tracking, calendars, news,
 forums, Gantt and files being disabled. They can be enabled explicitly;
@@ -179,6 +179,12 @@ as the editable source and export a GLB retaining node names and hierarchy.
 When rest poses are corrected in Blender, remove matching compensations from
 the YAML rather than applying them twice. Use a fresh import source for the new
 GLB: reconciliation of an already imported model is not implemented yet.
+
+GLB nodes may carry `extras.cosmosys_import` with `version: 1` and a `mode`
+of `include`, `exclude` or `atomic`. These are editable preflight defaults;
+explicit choices override them. YAML `disabled` entries default to exclusion.
+Atomic assemblies retain geometry but do not create descendant items. Controls
+inside an atomic assembly still require expanding it before import.
 
 ## License
 

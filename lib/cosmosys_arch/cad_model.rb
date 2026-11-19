@@ -8,7 +8,7 @@ module CosmosysArch
   class CadModel
     class Invalid < StandardError; end
     MAX_JSON = 32 * 1024 * 1024
-    attr_reader :nodes, :controls, :settings, :document, :json_size
+    attr_reader :nodes, :controls, :settings, :document, :json_size, :import_preferences
 
     def initialize(glb_path:, yaml_path: nil, filename:)
       File.open(glb_path, 'rb') do |file|
@@ -26,6 +26,15 @@ module CosmosysArch
       raise Invalid, 'Expected GLB document and nodes' unless document.is_a?(Hash) && document['nodes'].is_a?(Array)
       raise Invalid, 'Too many GLB nodes' if document.fetch('nodes').size > 20_000
       build_nodes
+      @import_preferences = nodes.each_with_object({}) do |node, preferences|
+        extras = document.fetch('nodes').fetch(node['index'])['extras']
+        next unless extras.is_a?(Hash) && extras.key?('cosmosys_import')
+        policy = extras['cosmosys_import']
+        unless policy.is_a?(Hash) && policy['version'] == 1 && %w[include exclude atomic].include?(policy['mode'])
+          raise Invalid, "Invalid import preference for #{node['path']}"
+        end
+        preferences[node['index'].to_s] = policy['mode']
+      end
       embedded = embedded_settings
       if yaml_path
         raise Invalid, 'YAML exceeds 2 MiB' if File.size(yaml_path) > 2 * 1024 * 1024

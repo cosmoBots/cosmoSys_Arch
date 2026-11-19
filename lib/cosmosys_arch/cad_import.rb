@@ -15,7 +15,7 @@ module CosmosysArch
         choice = choices.fetch(key, {})
         raise CadModel::Invalid, 'Each node decision must be a mapping' unless choice.is_a?(Hash)
         choice = choice.stringify_keys
-        mode = choice.fetch('mode', defaults.include?(key) ? 'exclude' : 'include')
+        mode = choice.fetch('mode', defaults.include?(key) ? 'exclude' : model.import_preferences.fetch(key, 'include'))
         visible = choice.fetch('visible', '1').to_s == '1'
         raise CadModel::Invalid, 'Invalid import policy' unless %w[include exclude atomic].include?(mode)
         [key, { 'mode' => mode, 'visible' => visible }]
