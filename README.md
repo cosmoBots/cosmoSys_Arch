@@ -1,6 +1,6 @@
 # cosmoSys Architecture
 
-Version **0.1.10** (experimental).
+Version **0.1.11** (experimental).
 
 New Architecture/PBS projects default to time tracking, calendars, news,
 forums, Gantt and files being disabled. They can be enabled explicitly;

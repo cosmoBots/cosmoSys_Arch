@@ -101,6 +101,7 @@ const initialize = viewer => {
     // Shared client-local scene controller for piece-camera capture and tests.
     // Runtime clients should continue using the validated batch event below.
     panel.archControls = controls;
+    panel.archControlValues = () => ({...values});
     // Generic batch API for optional execution clients. Validate every value
     // before changing any slider; the model and its saved defaults stay intact.
     panel.addEventListener('architecture:set-values', event => {

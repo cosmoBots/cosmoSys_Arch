@@ -66,9 +66,7 @@ export function initializePieceCamera(ModelControls, captureImage, panel = docum
         return;
       }
       const take = () => {
-        const inputs = [...document.querySelectorAll('[data-arch-control]')];
-        const values = Object.fromEntries(inputs.map(input => [input.dataset.archControl,
-          Number(input.parentElement.querySelector('output').textContent)]));
+        const values = automatic ? {} : document.querySelector('#arch-cad-controls').archControlValues();
         try {
           controls.setValues({});
           return {state: viewer.exportView(), image: captureImage(viewer).toDataURL('image/png')};
